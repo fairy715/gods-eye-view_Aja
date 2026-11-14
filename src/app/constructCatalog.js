@@ -18,6 +18,7 @@ import { createApplicationBikeshare } from './layers/bikeshare.js';
 import { createApplicationDirections } from './layers/directions.js';
 import { createApplicationRecentImagery } from './layers/recentImagery.js';
 import { createApplicationOsmPlaces } from './layers/osmPlaces.js';
+import { createApplicationVenues } from './layers/venues.js';
 import { createApplicationTransit } from './layers/transit.js';
 import { createApplicationRail } from './layers/rail.js';
 import { createApplicationInstallations } from './layers/militaryInstallations.js';
@@ -52,6 +53,8 @@ export const LOCAL_ONLY_LAYER_METADATA = Object.freeze([
   Object.freeze({ id: 'local-adsb', disposition: 'local-only' }),
   // Voice search results belong to this session, like a receiver to this machine.
   Object.freeze({ id: 'osm-places', disposition: 'local-only' }),
+  // Pinned on by this build (see pinnedLayers.js), so it needs no link token.
+  Object.freeze({ id: 'venues', disposition: 'local-only' }),
 ]);
 
 /** Serialization metadata for every layer the application catalog constructs. */
@@ -179,6 +182,7 @@ export function createApplicationCatalog({
         createApplicationDirections({ source: sources.directions }),
         createApplicationRecentImagery({ source: sources['recent-imagery'] }),
         createApplicationOsmPlaces(),
+        createApplicationVenues(),
         vessels,
         installations,
         createApplicationAwareness({

@@ -75,6 +75,10 @@ const PANEL_GROUPS = [
     ],
   },
   {
+    label: msg('Places'),
+    ids: ['venues'],
+  },
+  {
     label: msg('Events'),
     ids: [
       'rocket-launches',

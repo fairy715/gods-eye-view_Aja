@@ -24,6 +24,8 @@ export const OSM_FEATURE_LIMITS = Object.freeze({
   maxCountDeg2: 36,
   /** Most features one fetch returns. */
   maxLimit: 1000,
+  /** Most presets one request may combine. */
+  maxPresets: 4,
   /** Overpass server-side timeout, seconds: it gives up before we stop waiting. */
   timeoutS: 20,
   /** Overpass server-side memory cap, bytes. */
@@ -53,7 +55,12 @@ const KEPT_TAGS = [
   'emergency',
   'healthcare',
   'addr:street',
+  'addr:housenumber',
   'addr:city',
+  'cuisine',
+  'stars',
+  'phone',
+  'website',
 ];
 
 const quote = (text) =>
@@ -67,10 +74,23 @@ const quote = (text) =>
 export function compileOsmFeatureQuery(request = {}) {
   const refuse = (code, error) => ({ ok: false, code, error });
   const presetId = String(request.preset || '');
-  const preset = Object.hasOwn(OSM_PRESETS, presetId)
-    ? OSM_PRESETS[presetId]
-    : null;
-  if (!preset) return refuse('UNKNOWN_PRESET', 'Unknown feature kind.');
+  // One id, or a few joined by commas ("restaurant,cafe,hotel"): the box is
+  // then searched once for every listed kind. Each id must still be a curated
+  // preset, so the request never carries a tag or query text.
+  const presetIds = presetId.split(',');
+  if (
+    presetIds.length > OSM_FEATURE_LIMITS.maxPresets ||
+    new Set(presetIds).size !== presetIds.length ||
+    !presetIds.every((id) => Object.hasOwn(OSM_PRESETS, id))
+  )
+    return refuse('UNKNOWN_PRESET', 'Unknown feature kind.');
+  const preset =
+    presetIds.length === 1
+      ? OSM_PRESETS[presetId]
+      : {
+          id: presetId,
+          tags: presetIds.flatMap((id) => OSM_PRESETS[id].tags),
+        };
   const mode = request.mode === 'count' ? 'count' : 'features';
   const parts = (
     Array.isArray(request.bbox)

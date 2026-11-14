@@ -729,6 +729,15 @@ export const OSM_PLACES_CREDIT = {
     '(ODbL 1.0)',
 };
 
+/** Registered when the restaurants, cafés and hotels layer first shows venues. */
+export const VENUES_CREDIT = {
+  key: 'venues',
+  html:
+    'Restaurants, cafés and hotels: ' +
+    '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a> ' +
+    '(ODbL 1.0)',
+};
+
 /**
  * Per-feed transit credit, registered the first time that feed's vehicles
  * render (see `src/data/transitFeeds.js` for the license of each).
