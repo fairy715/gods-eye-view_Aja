@@ -1,12 +1,13 @@
 /**
- * Venues: restaurants, cafés and hotels from OpenStreetMap, loaded for the
- * ground in view. Pure — tile arithmetic and record mapping, no Cesium.
+ * Venues: restaurants, cafés and hotels from OpenStreetMap, read from the
+ * `poi` layer of OpenFreeMap vector tiles. Pure — record mapping and view
+ * arithmetic, no Cesium.
  * @module layers/venues/model
  */
 
 export const VENUES_LAYER_ID = 'venues';
 
-/** The kinds drawn, in panel order, each with the OSM preset it is fetched by. */
+/** The kinds drawn, in panel order. */
 export const VENUE_KINDS = Object.freeze(['restaurant', 'cafe', 'hotel']);
 
 export const VENUE_COLORS = Object.freeze({
@@ -15,17 +16,10 @@ export const VENUE_COLORS = Object.freeze({
   hotel: '#b388ff',
 });
 
-/** Preset ids sent to `/api/osm/features`, one request for all three kinds. */
-export const VENUE_PRESET = VENUE_KINDS.join(',');
+/** OpenFreeMap serves points of interest at its deepest zoom only. */
+export const VENUE_TILE_ZOOM = 14;
 
-/** Side of a level-0 tile in degrees (~4.4 km north-south). */
-export const VENUE_TILE_DEG = 0.04;
-/** A truncated tile is refetched as quarters, down to this level. */
-export const VENUE_MAX_LEVEL = 2;
-/** Features asked for per tile; the server caps this too. */
-export const VENUE_TILE_LIMIT = 1000;
-
-/** Longest tag value kept; OSM text is open text. */
+/** Longest name kept; OSM names are open text. */
 const MAX_TEXT = 120;
 
 function text(value) {
@@ -45,109 +39,86 @@ function text(value) {
         .trimEnd()}…`;
 }
 
-const tileSize = (level) => VENUE_TILE_DEG / 2 ** level;
-
-/** `level/x/y` of the tile holding a point. */
-export function venueTileKey(lat, lon, level = 0) {
-  const size = tileSize(level);
-  return `${level}/${Math.floor((lon + 180) / size)}/${Math.floor((lat + 90) / size)}`;
-}
-
-/** A tile's box as `[west, south, east, north]`, the order the route takes. */
-export function venueTileBox(key) {
-  const [level, x, y] = key.split('/').map(Number);
-  const size = tileSize(level);
-  const round = (value) => Number(value.toFixed(6));
-  return [
-    round(x * size - 180),
-    round(y * size - 90),
-    round((x + 1) * size - 180),
-    round((y + 1) * size - 90),
-  ];
-}
-
-/** The four quarter tiles of a tile, or none once the deepest level is reached. */
-export function venueTileChildren(key) {
-  const [level, x, y] = key.split('/').map(Number);
-  if (level >= VENUE_MAX_LEVEL) return [];
-  const children = [];
-  for (const dx of [0, 1])
-    for (const dy of [0, 1])
-      children.push(`${level + 1}/${x * 2 + dx}/${y * 2 + dy}`);
-  return children;
-}
-
 /**
- * Level-0 tiles within `radius` tiles of a point, nearest first, so the
- * ground under the crosshair loads before its surroundings.
- * @param {number} lat
- * @param {number} lon
- * @param {number} [radius]
- * @returns {string[]}
+ * Which venue kind an OpenMapTiles `poi` feature is, or null. `lodging`
+ * also covers hostels, guest houses and camp sites; only hotels are drawn.
+ * @param {{class?: string, subclass?: string}} properties
  */
-export function venueTilesAround(lat, lon, radius = 1) {
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return [];
-  const columns = Math.round(360 / VENUE_TILE_DEG);
-  const rows = Math.round(180 / VENUE_TILE_DEG);
-  const cx = Math.floor((lon + 180) / VENUE_TILE_DEG);
-  const cy = Math.floor((lat + 90) / VENUE_TILE_DEG);
-  const tiles = [];
-  for (let dx = -radius; dx <= radius; dx += 1)
-    for (let dy = -radius; dy <= radius; dy += 1) {
-      const y = cy + dy;
-      if (y < 0 || y >= rows) continue;
-      // Wrap across the antimeridian.
-      const x = (((cx + dx) % columns) + columns) % columns;
-      tiles.push({ key: `0/${x}/${y}`, rank: Math.abs(dx) + Math.abs(dy) });
-    }
-  return tiles.sort((a, b) => a.rank - b.rank).map((tile) => tile.key);
-}
-
-/** Which venue kind a feature's tags name, or null. */
-export function venueKind(tags = {}) {
-  if (tags.amenity === 'restaurant') return 'restaurant';
-  if (tags.amenity === 'cafe') return 'cafe';
-  if (tags.tourism === 'hotel') return 'hotel';
+export function venueKind(properties = {}) {
+  if (properties.class === 'restaurant') return 'restaurant';
+  if (properties.class === 'cafe') return 'cafe';
+  if (properties.class === 'lodging' && properties.subclass === 'hotel')
+    return 'hotel';
   return null;
 }
 
 /**
- * One feature from `/api/osm/features` → a venue record, or null when it has
- * no usable position or is not one of the three kinds.
- * @param {{id: string, lat: number, lon: number, tags?: object}} feature
+ * One `poi` feature → a venue record, or null when it has no usable position
+ * or is not one of the three kinds.
+ * @param {{id: string, lat: number, lon: number, properties?: object}} poi
  */
-export function mapVenueFeature(feature) {
-  if (!Number.isFinite(feature?.lat) || !Number.isFinite(feature?.lon))
-    return null;
-  const tags = feature.tags || {};
-  const kind = venueKind(tags);
+export function mapVenuePoi(poi) {
+  if (!Number.isFinite(poi?.lat) || !Number.isFinite(poi?.lon)) return null;
+  const props = poi.properties || {};
+  const kind = venueKind(props);
   if (!kind) return null;
-  const street = [text(tags['addr:street']), text(tags['addr:housenumber'])]
-    .filter(Boolean)
-    .join(' ');
+  const rank = Number(props.rank);
   return {
-    id: String(feature.id),
-    lat: feature.lat,
-    lon: feature.lon,
+    id: String(poi.id),
+    lat: poi.lat,
+    lon: poi.lon,
     kind,
     // The local name first: it is what the sign on the street says.
-    name: text(tags.name) || text(tags['name:en']),
-    nameEn: text(tags['name:en']),
-    operator: text(tags.brand) || text(tags.operator),
-    cuisine: text(tags.cuisine)?.replace(/_/g, ' ').replace(/;/g, ', ') || null,
-    stars: text(tags.stars),
-    openingHours: text(tags.opening_hours),
-    address: street || null,
-    city: text(tags['addr:city']),
-    phone: text(tags.phone),
-    website: text(tags.website),
+    name: text(props.name) || text(props['name:en']),
+    nameEn: text(props['name:en']),
+    // OpenMapTiles importance within the tile; lower is more prominent.
+    rank: Number.isFinite(rank) ? rank : null,
   };
 }
 
-/** Approximate ground distance in metres; enough to rank labels. */
+/**
+ * The box loaded around the view centre: wider from higher up, capped so a
+ * dense city stays a few tiles.
+ * @param {number} lat
+ * @param {number} lon
+ * @param {number} cameraHeightM
+ * @returns {{south: number, north: number, west: number, east: number}}
+ */
+export function venueViewBox(lat, lon, cameraHeightM) {
+  const radiusM = Math.min(2500, Math.max(700, cameraHeightM * 1.2));
+  const dLat = radiusM / 111_320;
+  const dLon =
+    radiusM / (111_320 * Math.max(0.05, Math.cos((lat * Math.PI) / 180)));
+  return {
+    south: Math.max(-85, lat - dLat),
+    north: Math.min(85, lat + dLat),
+    west: Math.max(-180, lon - dLon),
+    east: Math.min(180, lon + dLon),
+  };
+}
+
+/** Approximate ground distance in metres; enough to rank by nearness. */
 export function venueDistanceM(a, b) {
   const toRad = Math.PI / 180;
   const x = (b.lon - a.lon) * toRad * Math.cos(((a.lat + b.lat) / 2) * toRad);
   const y = (b.lat - a.lat) * toRad;
   return Math.hypot(x, y) * 6_371_000;
+}
+
+/**
+ * The venues to draw: those of the shown kinds nearest the centre, up to a
+ * limit, so a district with thousands of restaurants stays drawable.
+ * @param {Iterable<object>} records
+ * @param {{lat: number, lon: number}} centre
+ * @param {Record<string, boolean>} kinds
+ * @param {number} limit
+ * @returns {object[]} Nearest first.
+ */
+export function nearestVenues(records, centre, kinds, limit) {
+  const ranked = [];
+  for (const record of records)
+    if (kinds[record.kind])
+      ranked.push({ record, distance: venueDistanceM(centre, record) });
+  ranked.sort((a, b) => a.distance - b.distance);
+  return ranked.slice(0, limit).map(({ record }) => record);
 }

@@ -4,27 +4,23 @@ import {
   VENUES_LAYER_ID,
   VENUE_COLORS,
   VENUE_KINDS,
-  VENUE_PRESET,
-  VENUE_TILE_LIMIT,
-  mapVenueFeature,
-  venueDistanceM,
-  venueTileBox,
-  venueTileChildren,
-  venueTilesAround,
+  VENUE_TILE_ZOOM,
+  nearestVenues,
+  venueViewBox,
 } from './model.js';
 export * from './model.js';
 
 const OVERLAY_SOURCE_ID = VENUES_LAYER_ID;
 /** Named venues nearest the view centre that get a map label. */
 const LABEL_LIMIT = 40;
+/** Venues drawn at once, nearest the view centre first. */
+const DRAW_LIMIT = 2500;
 /** Above this camera height the layer neither loads nor draws. */
 const MAX_CAMERA_HEIGHT_M = 15_000;
-/** Level-0 tiles kept in memory; the least recently viewed go first. */
-const MAX_ROOTS = 36;
+/** Decoded tiles kept in memory; the least recently viewed go first. */
+const MAX_TILES = 40;
 const CAMERA_DEBOUNCE_MS = 350;
-const BUSY_RETRY_MS = 4_000;
-const FAILED_RETRY_MS = 30_000;
-const MAX_ATTEMPTS = 4;
+const RETRY_MS = 15_000;
 
 const KIND_LABELS = Object.freeze({
   restaurant: msg('Restaurants'),
@@ -32,34 +28,28 @@ const KIND_LABELS = Object.freeze({
   hotel: msg('Hotels'),
 });
 
-/** The level-0 tile a tile of any level sits in. */
-function rootOf(key) {
-  const [level, x, y] = key.split('/').map(Number);
-  return `0/${x >> level}/${y >> level}`;
-}
-
 /**
  * Restaurants, cafés and hotels around the point the camera looks at, from
- * OpenStreetMap through the operator's Overpass (`/api/osm/features`). The
- * ground is cut into fixed tiles so an answer is fetched once and then served
- * from the server's cache; a tile too dense for one answer is refetched as
- * quarters. Nothing loads from high altitude, where a city is a single dot.
+ * OpenStreetMap as published in OpenFreeMap vector tiles — keyless, and the
+ * same tiles Street Traffic reads its roads from. Tiles are decoded once and
+ * kept; the venues nearest the view centre are drawn, up to a limit. Nothing
+ * loads from high altitude, where a city is a single dot.
  *
  * @param {object} options
  * @param {object} options.overlayHost World-overlay label host.
- * @param {Function} options.search `/api/osm/features` client.
+ * @param {{fetchBounds: Function}} options.source Venue tile source.
  * @param {Function} [options.requestRender] Asks the scene for a frame.
  * @param {Function} [options.onCredit] Called once when venues first show.
  */
 export function createVenuesLayer({
   overlayHost,
-  search,
+  source,
   requestRender = () => {},
   onCredit = () => {},
 } = {}) {
   if (!overlayHost) throw new TypeError('Venues requires an overlay host');
-  if (typeof search !== 'function')
-    throw new TypeError('Venues requires an OSM feature source');
+  if (typeof source?.fetchBounds !== 'function')
+    throw new TypeError('Venues requires a venue tile source');
 
   let viewer = null;
   let dataSource = null;
@@ -69,22 +59,19 @@ export function createVenuesLayer({
   let debounceTimer = null;
   let retryTimer = null;
   let abort = null;
-  let running = false;
+  let loading = false;
   let credited = false;
-  /** true / false once the server answered, null while unknown. */
-  let configured = null;
   let tooHigh = false;
   let error = null;
   let lastUpdate = null;
   let centre = null;
-  /** Tile key → {status, attempts, retryAt, truncated}. */
+  /** `z/x/y` → venue records of that tile, in viewing order. */
   const tiles = new Map();
-  /** Level-0 key → ids of the records it contributed, in viewing order. */
-  const roots = new Map();
-  /** Record id → {record, entity}. */
+  /** Record id → {record, entity} of what is drawn now. */
   const shown = new Map();
+  /** Tiles of the current view; their venues are what the row counts. */
+  let viewKeys = [];
   const kinds = Object.fromEntries(VENUE_KINDS.map((kind) => [kind, true]));
-  let wanted = [];
 
   const colors = Object.fromEntries(
     VENUE_KINDS.map((kind) => [
@@ -122,33 +109,38 @@ export function createVenuesLayer({
     requestRender('venues');
   }
 
+  function* viewRecords() {
+    for (const key of viewKeys) yield* tiles.get(key) || [];
+  }
+
   function paintLabels() {
     if (!enabled || tooHigh || !centre) {
       overlayHost.clearSource(OVERLAY_SOURCE_ID);
       return;
     }
-    const named = [];
-    for (const { record } of shown.values())
-      if (record.name && kinds[record.kind])
-        named.push({ record, distance: venueDistanceM(centre, record) });
-    named.sort((a, b) => a.distance - b.distance);
-    const entries = named.slice(0, LABEL_LIMIT).map(({ record }, index) => ({
-      id: record.id,
-      position: Cesium.Cartesian3.fromDegrees(record.lon, record.lat),
-      variant: 'label',
-      title: record.name.slice(0, 40),
-      accent: VENUE_COLORS[record.kind],
-      priority: LABEL_LIMIT - index,
-      collisionGroup: 'ambient-label',
-      paintLane: 'ambient-label',
-      interactive: false,
-      edgeFade: 'keyhole',
-      horizonCull: true,
-      terrainOcclusion: false,
-      gapPx: 12,
-      verticalOnly: true,
-      placement: 'above',
-    }));
+    // `shown` is already nearest-first.
+    const entries = [];
+    for (const { record } of shown.values()) {
+      if (!record.name) continue;
+      entries.push({
+        id: record.id,
+        position: Cesium.Cartesian3.fromDegrees(record.lon, record.lat),
+        variant: 'label',
+        title: record.name.slice(0, 40),
+        accent: VENUE_COLORS[record.kind],
+        priority: LABEL_LIMIT - entries.length,
+        collisionGroup: 'ambient-label',
+        paintLane: 'ambient-label',
+        interactive: false,
+        edgeFade: 'keyhole',
+        horizonCull: true,
+        terrainOcclusion: false,
+        gapPx: 12,
+        verticalOnly: true,
+        placement: 'above',
+      });
+      if (entries.length >= LABEL_LIMIT) break;
+    }
     overlayHost.setEntries(OVERLAY_SOURCE_ID, entries, {
       cohortLimit: LABEL_LIMIT,
       collisionCapacity: LABEL_LIMIT,
@@ -156,169 +148,116 @@ export function createVenuesLayer({
     });
   }
 
-  function addRecords(root, features) {
-    const ids = roots.get(root);
-    if (!ids || !dataSource) return;
-    for (const feature of features) {
-      const record = mapVenueFeature(feature);
-      if (!record || shown.has(record.id)) continue;
-      const entity = dataSource.entities.add({
-        id: `venue:${record.id}`,
-        name: record.name || t(KIND_LABELS[record.kind]),
-        show: kinds[record.kind],
-        position: Cesium.Cartesian3.fromDegrees(record.lon, record.lat),
-        point: {
-          pixelSize: 8,
-          color: colors[record.kind],
-          outlineColor: Cesium.Color.BLACK.withAlpha(0.8),
-          outlineWidth: 2,
-          heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-          // On top only up close; beyond that the depth test keeps far-side
-          // points from showing through buildings and terrain.
-          disableDepthTestDistance: 2500,
-        },
-      });
-      shown.set(record.id, { record, entity });
-      ids.add(record.id);
+  /** Draw the venues nearest the centre; keep the entities that stay. */
+  function draw() {
+    if (!dataSource) return;
+    const next =
+      enabled && !tooHigh && centre
+        ? nearestVenues(viewRecords(), centre, kinds, DRAW_LIMIT)
+        : [];
+    const keep = new Set(next.map((record) => record.id));
+    for (const [id, held] of shown) {
+      if (keep.has(id)) continue;
+      dataSource.entities.remove(held.entity);
+      shown.delete(id);
     }
-  }
-
-  function evictRoots() {
-    if (roots.size <= MAX_ROOTS) return;
-    const keep = new Set(wanted.map(rootOf));
-    for (const [root, ids] of roots) {
-      if (roots.size <= MAX_ROOTS) break;
-      if (keep.has(root)) continue;
-      for (const id of ids) {
-        const held = shown.get(id);
-        if (held) dataSource?.entities.remove(held.entity);
-        shown.delete(id);
-      }
-      roots.delete(root);
-      for (const key of [...tiles.keys()])
-        if (rootOf(key) === root) tiles.delete(key);
+    const ordered = new Map();
+    for (const record of next) {
+      const held = shown.get(record.id) || {
+        record,
+        entity: dataSource.entities.add({
+          id: `venue:${record.id}`,
+          name: record.name || t(KIND_LABELS[record.kind]),
+          position: Cesium.Cartesian3.fromDegrees(record.lon, record.lat),
+          point: {
+            pixelSize: 8,
+            color: colors[record.kind],
+            outlineColor: Cesium.Color.BLACK.withAlpha(0.8),
+            outlineWidth: 2,
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+            // On top only up close; beyond that the depth test keeps
+            // far-side points from showing through buildings and terrain.
+            disableDepthTestDistance: 2500,
+          },
+        }),
+      };
+      ordered.set(record.id, held);
     }
-  }
-
-  /** Wanted level-0 tiles, each replaced by its quarters once truncated. */
-  function expand(keys) {
-    const out = [];
-    for (const key of keys) {
-      out.push(key);
-      const tile = tiles.get(key);
-      if (tile?.status === 'ready' && tile.truncated)
-        out.push(...expand(venueTileChildren(key)));
+    shown.clear();
+    for (const [id, held] of ordered) shown.set(id, held);
+    if (!credited && shown.size) {
+      credited = true;
+      onCredit(viewer);
     }
-    return out;
-  }
-
-  function nextTile() {
-    const now = Date.now();
-    let wake = Infinity;
-    for (const key of expand(wanted)) {
-      const tile = tiles.get(key);
-      if (!tile) return { key };
-      if (tile.status !== 'failed' || tile.attempts >= MAX_ATTEMPTS) continue;
-      if (tile.retryAt <= now) return { key };
-      wake = Math.min(wake, tile.retryAt);
-    }
-    return { key: null, wake };
-  }
-
-  async function pump() {
-    if (running || !enabled || tooHigh || configured === false) return;
-    clearTimeout(retryTimer);
-    const { key, wake } = nextTile();
-    if (!key) {
-      if (Number.isFinite(wake))
-        retryTimer = setTimeout(pump, Math.max(250, wake - Date.now()));
-      refreshRow();
-      return;
-    }
-    running = true;
-    const tile = tiles.get(key) || { attempts: 0 };
-    tile.status = 'loading';
-    tile.attempts += 1;
-    tiles.set(key, tile);
+    paintLabels();
     refreshRow();
+  }
+
+  function evictTiles() {
+    const keep = new Set(viewKeys);
+    for (const key of tiles.keys()) {
+      if (tiles.size <= MAX_TILES) break;
+      if (!keep.has(key)) tiles.delete(key);
+    }
+  }
+
+  async function load(box) {
+    abort?.abort();
     abort = new AbortController();
     const { signal } = abort;
-    let result;
+    clearTimeout(retryTimer);
+    loading = true;
+    refreshRow();
     try {
-      result = await search(
-        {
-          preset: VENUE_PRESET,
-          bbox: venueTileBox(key),
-          limit: VENUE_TILE_LIMIT,
+      const result = await source.fetchBounds(box, {
+        zoom: VENUE_TILE_ZOOM,
+        signal,
+        onTile(value, tile) {
+          if (signal.aborted) return;
+          const key = `${tile.z}/${tile.x}/${tile.y}`;
+          // Viewing a tile again makes it the most recently used.
+          tiles.delete(key);
+          tiles.set(key, value?.venues || []);
+          if (!viewKeys.includes(key)) viewKeys.push(key);
+          draw();
         },
-        { signal },
+      });
+      if (signal.aborted) return;
+      viewKeys = result.loadedTiles.map(
+        (tile) => `${tile.z}/${tile.x}/${tile.y}`,
       );
-    } catch {
-      result = { ok: false, status: 0, error: null };
-    }
-    running = false;
-    if (signal.aborted || !enabled) {
-      tiles.delete(key);
-      return;
-    }
-    if (result?.ok && Array.isArray(result.features)) {
-      configured = true;
-      error = null;
-      tile.status = 'ready';
-      tile.truncated =
-        result.truncated === true && venueTileChildren(key).length > 0;
-      const root = rootOf(key);
-      if (!roots.has(root)) roots.set(root, new Set());
-      addRecords(root, result.features);
+      error = result.partial ? msg('Some venue tiles did not load') : null;
       lastUpdate = Date.now();
-      if (!credited && shown.size) {
-        credited = true;
-        onCredit(viewer);
+      evictTiles();
+      if (result.partial) retryTimer = setTimeout(refreshView, RETRY_MS);
+    } catch (cause) {
+      if (signal.aborted) return;
+      error = msg('Venue tiles unavailable');
+      console.warn('[Data] venues tile load failed:', cause?.message || cause);
+      retryTimer = setTimeout(refreshView, RETRY_MS);
+    } finally {
+      if (!signal.aborted) {
+        loading = false;
+        draw();
       }
-      evictRoots();
-      paintLabels();
-    } else if (result?.code === 'OVERPASS_NOT_CONFIGURED') {
-      configured = false;
-      tiles.delete(key);
-    } else {
-      const busy = result?.status === 429 || result?.status === 503;
-      tile.status = 'failed';
-      tile.retryAt = Date.now() + (busy ? BUSY_RETRY_MS : FAILED_RETRY_MS);
-      // A busy server is a wait, not a fault worth showing.
-      if (!busy || tile.attempts >= MAX_ATTEMPTS)
-        error = result?.error || msg('OpenStreetMap search failed.');
     }
-    pump();
   }
 
   function refreshView() {
     if (!enabled || !viewer) return;
-    tooHigh = cameraHeight() > MAX_CAMERA_HEIGHT_M;
+    const height = cameraHeight();
+    tooHigh = height > MAX_CAMERA_HEIGHT_M;
     if (dataSource) dataSource.show = !tooHigh;
     centre = viewCentre();
     if (tooHigh || !centre) {
-      wanted = [];
-      paintLabels();
-      refreshRow();
+      abort?.abort();
+      loading = false;
+      viewKeys = [];
+      draw();
       return;
     }
-    wanted = venueTilesAround(centre.lat, centre.lon, 1);
-    // Viewing a tile again makes it the most recently used.
-    for (const root of wanted) {
-      const ids = roots.get(root);
-      if (ids) {
-        roots.delete(root);
-        roots.set(root, ids);
-      }
-      // A tile that gave up gets a fresh start when it is looked at again.
-      for (const key of expand([root])) {
-        const tile = tiles.get(key);
-        if (tile?.status === 'failed' && tile.attempts >= MAX_ATTEMPTS)
-          tiles.delete(key);
-      }
-    }
-    paintLabels();
-    pump();
+    draw();
+    load(venueViewBox(centre.lat, centre.lon, height));
   }
 
   function scheduleRefresh() {
@@ -332,28 +271,20 @@ export function createVenuesLayer({
     clearTimeout(retryTimer);
     abort?.abort();
     abort = null;
-    running = false;
-    for (const [key, tile] of tiles)
-      if (tile.status === 'loading') tiles.delete(key);
+    loading = false;
   }
 
   function setKind(kind, on) {
     if (!Object.hasOwn(kinds, kind)) return;
     kinds[kind] = Boolean(on);
-    for (const { record, entity } of shown.values())
-      if (record.kind === kind) entity.show = kinds[kind];
-    paintLabels();
-    refreshRow();
+    draw();
   }
 
   function counts() {
     const out = Object.fromEntries(VENUE_KINDS.map((kind) => [kind, 0]));
-    for (const { record } of shown.values()) out[record.kind] += 1;
+    for (const record of viewRecords()) out[record.kind] += 1;
     return out;
   }
-
-  const loading = () =>
-    running || [...tiles.values()].some((tile) => tile.status === 'loading');
 
   return {
     id: VENUES_LAYER_ID,
@@ -365,17 +296,6 @@ export function createVenuesLayer({
 
     attachDataManager(manager) {
       dataManager = manager;
-    },
-
-    /** Unavailable only once the server says no Overpass is configured. */
-    getSourceAvailability() {
-      return configured === false
-        ? {
-            available: false,
-            source: VENUES_LAYER_ID,
-            reason: 'Needs an Overpass server (OVERPASS_UPSTREAMS)',
-          }
-        : { available: true, source: VENUES_LAYER_ID, reason: null };
     },
 
     init(nextViewer) {
@@ -399,6 +319,7 @@ export function createVenuesLayer({
       enabled = false;
       stopLoading();
       if (dataSource) dataSource.show = false;
+      draw();
       overlayHost.clearSource(OVERLAY_SOURCE_ID);
       overlayHost.setVisible(OVERLAY_SOURCE_ID, false);
       return true;
@@ -418,9 +339,8 @@ export function createVenuesLayer({
       viewer = null;
       dataManager = null;
       tiles.clear();
-      roots.clear();
       shown.clear();
-      wanted = [];
+      viewKeys = [];
       centre = null;
       error = null;
       lastUpdate = null;
@@ -467,31 +387,25 @@ export function createVenuesLayer({
     },
 
     getAnalystRecords(maxCount = 2000) {
-      if (!enabled) return [];
+      if (!enabled || !centre) return [];
       const limit = Number.isFinite(maxCount)
         ? Math.max(1, Math.floor(maxCount))
         : 2000;
-      const out = [];
-      for (const { record } of shown.values()) {
-        if (!kinds[record.kind]) continue;
-        out.push({ ...record });
-        if (out.length >= limit) break;
-      }
-      return out;
+      return nearestVenues(viewRecords(), centre, kinds, limit).map(
+        (record) => ({ ...record }),
+      );
     },
 
     getStats() {
       let count = 0;
-      for (const { record } of shown.values()) if (kinds[record.kind]) count++;
+      for (const record of viewRecords()) if (kinds[record.kind]) count++;
       let statusMessage = null;
-      if (configured === false)
-        statusMessage = msg('Needs an Overpass server (OVERPASS_UPSTREAMS)');
-      else if (tooHigh) statusMessage = msg('Zoom in to a city to load venues');
-      else if (loading()) statusMessage = msg('Loading venues…');
+      if (tooHigh) statusMessage = msg('Zoom in to a city to load venues');
+      else if (loading) statusMessage = msg('Loading venues…');
       return {
         count: tooHigh ? 0 : count,
         lastUpdate,
-        error: configured === false || loading() ? null : error,
+        error: loading ? null : error,
         statusMessage,
       };
     },

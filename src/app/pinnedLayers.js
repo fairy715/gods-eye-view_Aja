@@ -4,7 +4,7 @@
  * @module app/pinnedLayers
  */
 
-export const PINNED_LAYER_IDS = Object.freeze(['venues']);
+export const PINNED_LAYER_IDS = Object.freeze(['venues', 'traffic']);
 const STORAGE_KEY = 'gev.pinnedLayersOff';
 
 function readOff(storage) {

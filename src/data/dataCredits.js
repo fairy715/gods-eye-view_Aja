@@ -734,6 +734,8 @@ export const VENUES_CREDIT = {
   key: 'venues',
   html:
     'Restaurants, cafés and hotels: ' +
+    '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> ' +
+    '© <a href="https://openmaptiles.org" target="_blank" rel="noopener">OpenMapTiles</a>, data ' +
     '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a> ' +
     '(ODbL 1.0)',
 };

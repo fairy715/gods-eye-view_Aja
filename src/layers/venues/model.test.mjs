@@ -1,95 +1,83 @@
-// Venues: tile arithmetic, record mapping, and the combined-preset query the
-// layer asks the server for.
+// Venues: OpenMapTiles `poi` features become venue records, and the view
+// draws the nearest of the shown kinds.
 //
 // Run with: npm test
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  VENUE_MAX_LEVEL,
-  VENUE_PRESET,
-  mapVenueFeature,
+  mapVenuePoi,
+  nearestVenues,
   venueKind,
-  venueTileBox,
-  venueTileChildren,
-  venueTileKey,
-  venueTilesAround,
+  venueViewBox,
 } from './model.js';
-import { compileOsmFeatureQuery } from '../../../server/providers/overpass/osmFeatures.js';
 
-test('a point sits inside the box of its own tile, and quarters tile the parent', () => {
-  const key = venueTileKey(25.0478, 121.5319);
-  const [west, south, east, north] = venueTileBox(key);
-  assert.ok(west <= 121.5319 && 121.5319 < east);
-  assert.ok(south <= 25.0478 && 25.0478 < north);
-  const children = venueTileChildren(key);
-  assert.equal(children.length, 4);
-  const boxes = children.map(venueTileBox);
-  assert.equal(Math.min(...boxes.map((box) => box[0])), west);
-  assert.equal(Math.max(...boxes.map((box) => box[3])), north);
-  let deepest = key;
-  for (let level = 0; level < VENUE_MAX_LEVEL; level += 1)
-    [deepest] = venueTileChildren(deepest);
-  assert.deepEqual(venueTileChildren(deepest), [], 'subdivision is bounded');
+test('only restaurants, cafés and hotels are venues', () => {
+  assert.equal(venueKind({ class: 'restaurant' }), 'restaurant');
+  assert.equal(venueKind({ class: 'cafe', subclass: 'cafe' }), 'cafe');
+  assert.equal(venueKind({ class: 'lodging', subclass: 'hotel' }), 'hotel');
+  assert.equal(venueKind({ class: 'lodging', subclass: 'hostel' }), null);
+  assert.equal(venueKind({ class: 'bank' }), null);
 });
 
-test('the view loads its own tile first, then the ring around it', () => {
-  const tiles = venueTilesAround(25.0478, 121.5319, 1);
-  assert.equal(tiles.length, 9);
-  assert.equal(tiles[0], venueTileKey(25.0478, 121.5319));
-  assert.equal(new Set(tiles).size, 9);
-  assert.deepEqual(venueTilesAround(NaN, 0), []);
-  // The ring wraps across the antimeridian rather than leaving the globe.
-  assert.equal(venueTilesAround(0, 179.99, 1).length, 9);
-});
-
-test('features map to the three kinds, with the local name first', () => {
-  assert.equal(venueKind({ amenity: 'cafe' }), 'cafe');
-  assert.equal(venueKind({ tourism: 'hotel' }), 'hotel');
-  assert.equal(venueKind({ amenity: 'bank' }), null);
-  const record = mapVenueFeature({
-    id: 'node/1',
+test('a poi maps to a record with the local name first', () => {
+  const record = mapVenuePoi({
+    id: '14/13723/7013:42',
     lat: 25.04,
     lon: 121.53,
-    tags: {
-      amenity: 'restaurant',
-      name: '鼎泰豐',
-      'name:en': 'Din Tai Fung',
-      cuisine: 'chinese;dumpling',
-      'addr:street': '信義路二段',
-      'addr:housenumber': '194',
+    properties: {
+      class: 'lodging',
+      subclass: 'hotel',
+      name: '華國大飯店',
+      'name:en': 'Imperial Hotel',
+      rank: 36,
     },
   });
-  assert.equal(record.kind, 'restaurant');
-  assert.equal(record.name, '鼎泰豐');
-  assert.equal(record.nameEn, 'Din Tai Fung');
-  assert.equal(record.cuisine, 'chinese, dumpling');
-  assert.equal(record.address, '信義路二段 194');
-  assert.equal(mapVenueFeature({ id: 'node/2', tags: {} }), null);
+  assert.deepEqual(record, {
+    id: '14/13723/7013:42',
+    lat: 25.04,
+    lon: 121.53,
+    kind: 'hotel',
+    name: '華國大飯店',
+    nameEn: 'Imperial Hotel',
+    rank: 36,
+  });
+  assert.equal(mapVenuePoi({ id: 'x', properties: { class: 'cafe' } }), null);
   assert.equal(
-    mapVenueFeature({
-      id: 'node/3',
+    mapVenuePoi({ id: 'x', lat: 1, lon: 1, properties: { class: 'bank' } }),
+    null,
+  );
+  assert.equal(
+    mapVenuePoi({
+      id: 'x',
       lat: 1,
       lon: 1,
-      tags: { amenity: 'bank' },
-    }),
-    null,
+      properties: { class: 'cafe', name: 'a‮b\n c' },
+    }).name,
+    'ab c',
+    'control and bidi characters never reach a label',
   );
 });
 
-test('one request searches a tile for all three kinds, from curated presets only', () => {
-  const compiled = compileOsmFeatureQuery({
-    preset: VENUE_PRESET,
-    bbox: venueTileBox(venueTileKey(25.0478, 121.5319)),
-    limit: 1000,
-  });
-  assert.equal(compiled.ok, true);
-  assert.match(compiled.ql, /nwr\["amenity"="restaurant"\]/);
-  assert.match(compiled.ql, /nwr\["amenity"="cafe"\]/);
-  assert.match(compiled.ql, /nwr\["tourism"="hotel"\]/);
-  for (const preset of ['restaurant,nope', 'cafe,cafe', 'a,b,c,d,e', ','])
-    assert.equal(
-      compileOsmFeatureQuery({ preset, bbox: [0, 0, 1, 1] }).code,
-      'UNKNOWN_PRESET',
-      preset,
-    );
+test('the loaded box widens with height and stays bounded', () => {
+  const low = venueViewBox(25.04, 121.53, 300);
+  const high = venueViewBox(25.04, 121.53, 12_000);
+  const spanM = (box) => (box.north - box.south) * 111_320;
+  assert.ok(Math.abs(spanM(low) - 1400) < 1, 'at least 700 m each way');
+  assert.ok(Math.abs(spanM(high) - 5000) < 1, 'at most 2.5 km each way');
+  assert.ok(low.west < 121.53 && 121.53 < low.east);
+});
+
+test('the nearest venues of the shown kinds are drawn, up to the limit', () => {
+  const centre = { lat: 25.04, lon: 121.53 };
+  const records = [
+    { id: 'far', kind: 'cafe', lat: 25.06, lon: 121.53 },
+    { id: 'near', kind: 'cafe', lat: 25.0401, lon: 121.53 },
+    { id: 'hidden', kind: 'restaurant', lat: 25.04, lon: 121.53 },
+    { id: 'mid', kind: 'hotel', lat: 25.045, lon: 121.53 },
+  ];
+  const kinds = { restaurant: false, cafe: true, hotel: true };
+  assert.deepEqual(
+    nearestVenues(records, centre, kinds, 2).map((record) => record.id),
+    ['near', 'mid'],
+  );
 });

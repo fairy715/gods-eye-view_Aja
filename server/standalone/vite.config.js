@@ -8,7 +8,6 @@ import { apiNotFoundPlugin } from './api-not-found.js';
 import { googleTokenUnavailablePlugin } from './google-token-unavailable.js';
 import { standaloneVoiceTools } from './voiceTools.js';
 import { unwatchedRuntimeDirsPlugin } from './unwatched-cache.js';
-import { applyBuildDefaults } from './buildDefaults.js';
 
 const root = fileURLToPath(new URL('../../', import.meta.url));
 
@@ -21,7 +20,6 @@ export function standaloneConfig(
   for (const [key, value] of Object.entries(loaded)) {
     if (process.env[key] === undefined) process.env[key] = value;
   }
-  applyBuildDefaults();
   const tools = standaloneVoiceTools();
   return createBrowserViteConfig({
     plugins: [
