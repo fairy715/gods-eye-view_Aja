@@ -25,6 +25,10 @@ hdiutil detach "$MOUNT" >/dev/null
 APP="$INSTALL/$NAME.app"
 codesign --verify --verbose=2 "$APP" || echo "::warning::signature check failed"
 "$APP/Contents/Resources/node/bin/node" --version
+for key in CFBundleName CFBundleDisplayName CFBundleShortVersionString CFBundleVersion CFBundleIdentifier; do
+  echo "$key: $(plutil -extract "$key" raw "$APP/Contents/Info.plist")"
+done
+test "$(plutil -extract CFBundleName raw "$APP/Contents/Info.plist")" = "$NAME"
 
 echo "== Open the app"
 open "$APP"
@@ -60,6 +64,11 @@ expect 503 -X POST -H "Origin: http://127.0.0.1:4173" \
   -d '{"messages":[{"role":"user","content":"hi"}]}' "${URL}api/claude/chat"
 test -f "$DATA/app/.gev-build"
 echo "installed build $(cat "$DATA/app/.gev-build")"
+if grep -q '^cp: ' "$DATA/server.log"; then
+  echo "::error::installing the copy fell back from a clone:"
+  grep '^cp: ' "$DATA/server.log"
+  exit 1
+fi
 
 echo "== Map in a browser"
 node "$ROOT/packaging/macos/smoke-browser.mjs" "$URL" "$RUNNER_TEMP/smoke.png" ||

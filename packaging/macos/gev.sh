@@ -51,9 +51,11 @@ install_copy() {
   fi
   echo "Installing build $build to $APP" >>"$LOG"
   rm -rf "$APP.new"
-  # -X leaves out extended attributes, such as the download quarantine.
-  /bin/cp -RcX "$SRC" "$APP.new" 2>>"$LOG" || /bin/cp -RX "$SRC" "$APP.new" ||
+  # cp refuses -c (clone) with -X (no extended attributes), so clone and
+  # then drop the download quarantine the copy may carry.
+  /bin/cp -Rc "$SRC" "$APP.new" 2>>"$LOG" || /bin/cp -R "$SRC" "$APP.new" ||
     fail "Could not copy the app to $DATA"
+  /usr/bin/xattr -dr com.apple.quarantine "$APP.new" 2>/dev/null
   if [ -d "$APP" ]; then
     for name in "${KEEP[@]}"; do
       [ -e "$APP/$name" ] && mv "$APP/$name" "$APP.new/$name"

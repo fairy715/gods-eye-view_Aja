@@ -24,9 +24,10 @@ mkdir -p "$OUT"
 echo "== Applet"
 osacompile -s -o "$APP" "$ROOT/packaging/macos/launcher.applescript"
 PLIST="$APP/Contents/Info.plist"
+# plutil takes the value as one argument, so the apostrophe in the name
+# needs no quoting (PlistBuddy parses quotes inside its command string).
 set_plist() {
-  /usr/libexec/PlistBuddy -c "Set :$1 $2" "$PLIST" 2>/dev/null ||
-    /usr/libexec/PlistBuddy -c "Add :$1 string $2" "$PLIST"
+  plutil -replace "$1" -string "$2" "$PLIST"
 }
 set_plist CFBundleIdentifier local.godseyeview.app
 set_plist CFBundleName "$NAME"
