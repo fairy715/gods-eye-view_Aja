@@ -1,8 +1,8 @@
 name: macOS DMG
 
-# Builds "God's Eye View.app" as a DMG for Apple silicon and for Intel Macs,
-# installs each from its image, opens it and checks it, then keeps the DMGs
-# as run artifacts.
+# Builds "God's Eye View.app" as a DMG for Intel Macs (Apple silicon can be
+# added back to the matrix), installs it from the image, opens it and checks
+# it, then keeps the DMG as a run artifact.
 on:
   workflow_dispatch:
   # Every push to a working branch, so the DMG always has the latest app.
@@ -23,10 +23,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Only the Intel build is wanted for now. For Apple silicon, add:
+        #   - name: Apple silicon
+        #     runner: macos-15
+        #     arch: arm64
         include:
-          - name: Apple silicon
-            runner: macos-15
-            arch: arm64
           - name: Intel
             runner: macos-15-intel
             arch: x86_64
