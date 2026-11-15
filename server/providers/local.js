@@ -22,6 +22,7 @@ import { aisLiveProxy } from './vessels/ais-live.js';
 import { trackBackfillProxies } from './aircraft/tracks.js';
 import { openAiRealtimeProxy } from './openai.js';
 import { geminiLiveProxy } from './gemini.js';
+import { claudeChatProxy } from './claude.js';
 import { googlePlacesContextProxy } from './places.js';
 import { mapillaryProxy } from './mapillary.js';
 import { keySetupEndpoint } from '../standalone/key-setup.js';
@@ -41,13 +42,15 @@ import { libraryProxy } from './library.js';
 
 /**
  * Construct the local provider plugins in their established order.
- * `realtime` configures OpenAI; `gemini` explicitly opts into Gemini Live.
+ * `realtime` configures OpenAI; `gemini` explicitly opts into Gemini Live,
+ * and `claude` into typed chat answered by Claude.
  * `nominatimStorageDir` binds an owned absolute directory before construction;
  * omission retains the durable per-source cache and policy state.
  */
 function localProviderPlugins({
   realtime,
   gemini,
+  claude,
   nominatimStorageDir = NOMINATIM_CACHE_DIR,
 } = {}) {
   if (
@@ -80,6 +83,7 @@ function localProviderPlugins({
     trackBackfillProxies(),
     openAiRealtimeProxy({ realtime }),
     ...(gemini ? [geminiLiveProxy({ realtime: gemini })] : []),
+    ...(claude ? [claudeChatProxy({ realtime: claude })] : []),
     googlePlacesContextProxy(),
     windProxy(),
     weatherProxy(),

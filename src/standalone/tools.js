@@ -18,7 +18,7 @@ export function createStandaloneTools(options) {
     },
     ...options,
     voice: {
-      supportedProviders: ['openai', 'gemini'],
+      supportedProviders: ['openai', 'gemini', 'claude'],
       panel: true,
       toolCatalog: loadToolCatalog,
       ...options?.voice,

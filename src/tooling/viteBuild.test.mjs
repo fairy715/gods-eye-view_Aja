@@ -155,8 +155,15 @@ test('root config retains existing named exports and standalone provider order',
     standaloneProviders.indexOf('gemini-live-proxy'),
     standaloneProviders.indexOf('openai-realtime-proxy') + 1,
   );
+  // Claude chat is opted into the same way, straight after Gemini.
+  assert.equal(
+    standaloneProviders.indexOf('claude-chat-proxy'),
+    standaloneProviders.indexOf('gemini-live-proxy') + 1,
+  );
   assert.deepEqual(
-    standaloneProviders.filter((name) => name !== 'gemini-live-proxy'),
+    standaloneProviders.filter(
+      (name) => !['gemini-live-proxy', 'claude-chat-proxy'].includes(name),
+    ),
     providers
       .localProviderPlugins({ nominatimStorageDir })
       .map((plugin) => plugin.name),

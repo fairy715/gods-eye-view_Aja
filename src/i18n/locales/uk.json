@@ -3312,6 +3312,8 @@
   "Hotels": "Готелі",
   "Zoom in to a city to load venues": "Наблизьте місто, щоб завантажити заклади",
   "Loading venues…": "Завантаження закладів…",
+  "Claude answers typed chat only. For voice, choose OpenAI or Gemini.": "Claude відповідає лише в текстовому чаті. Для голосу оберіть OpenAI або Gemini.",
+  "Typed chat answered by Claude": "Текстовий чат із відповідями Claude",
   "phone|Police": "Поліція",
   "Reading the location…": "Зчитування місцезнаходження…",
   "The short link could not be opened": "Не вдалося відкрити коротке посилання",

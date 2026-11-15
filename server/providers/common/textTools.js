@@ -17,6 +17,7 @@ export function invalidCalls(calls, tools) {
 
 // Missing usage stays unknown, never an invented zero-cost request.
 export function parseUsage(provider, data) {
+  if (provider === 'claude') return parseClaudeUsage(data?.usage);
   const raw = provider === 'gemini' ? data?.usageMetadata : data?.usage;
   const number = (value) =>
     Number.isSafeInteger(value) && value >= 0 ? value : null;
@@ -50,5 +51,27 @@ export function parseUsage(provider, data) {
           ? raw?.cachedContentTokenCount
           : raw?.prompt_tokens_details?.cached_tokens,
       ) ?? 0,
+  };
+}
+
+// The Messages API counts cached input apart from the rest; the total a
+// reader expects is all three, with the cache reads named on their own.
+function parseClaudeUsage(raw) {
+  const number = (value) =>
+    Number.isSafeInteger(value) && value >= 0 ? value : null;
+  const uncached = number(raw?.input_tokens);
+  const outputTokens = number(raw?.output_tokens);
+  if (uncached === null || outputTokens === null) return null;
+  const cachedInputTokens = number(raw?.cache_read_input_tokens) ?? 0;
+  const inputTokens =
+    uncached +
+    cachedInputTokens +
+    (number(raw?.cache_creation_input_tokens) ?? 0);
+  return {
+    inputTokens,
+    outputTokens,
+    totalTokens: inputTokens + outputTokens,
+    reasoningTokens: 0,
+    cachedInputTokens,
   };
 }

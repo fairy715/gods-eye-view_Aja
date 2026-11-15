@@ -3079,6 +3079,8 @@
   "Hotels": "Hotell",
   "Zoom in to a city to load venues": "Zooma in på en stad för att läsa in ställen",
   "Loading venues…": "Läser in ställen…",
+  "Claude answers typed chat only. For voice, choose OpenAI or Gemini.": "Claude svarar bara i skriven chatt. Välj OpenAI eller Gemini för röst.",
+  "Typed chat answered by Claude": "Skriven chatt som Claude svarar i",
   "phone|Police": "Polis",
   "Reading the location…": "Läser platsen…",
   "The short link could not be opened": "Kortlänken kunde inte öppnas",

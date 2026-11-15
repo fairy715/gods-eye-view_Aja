@@ -3450,6 +3450,8 @@
   "Hotels": "فنادق",
   "Zoom in to a city to load venues": "قرّب إلى مدينة لتحميل الأماكن",
   "Loading venues…": "جارٍ تحميل الأماكن…",
+  "Claude answers typed chat only. For voice, choose OpenAI or Gemini.": "Claude يجيب عن المحادثة المكتوبة فقط. للصوت اختر OpenAI أو Gemini.",
+  "Typed chat answered by Claude": "محادثة مكتوبة يجيب عنها Claude",
   "phone|Police": "الشرطة",
   "Reading the location…": "جارٍ قراءة الموقع…",
   "The short link could not be opened": "تعذّر فتح الرابط المختصر",

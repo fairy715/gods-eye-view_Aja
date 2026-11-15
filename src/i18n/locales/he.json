@@ -1814,6 +1814,8 @@
   "Hotels": "מלונות",
   "Zoom in to a city to load venues": "התקרבו לעיר כדי לטעון מקומות",
   "Loading venues…": "טוען מקומות…",
+  "Claude answers typed chat only. For voice, choose OpenAI or Gemini.": "Claude עונה רק בצ'אט מוקלד. לקול, בחרו OpenAI או Gemini.",
+  "Typed chat answered by Claude": "צ'אט מוקלד ש-Claude עונה בו",
   "phone|Police": "משטרה",
   "Reading the location…": "קורא את המיקום…",
   "The short link could not be opened": "לא ניתן לפתוח את הקישור המקוצר",

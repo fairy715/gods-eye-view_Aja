@@ -3237,6 +3237,8 @@
   "Hotels": "Hotel",
   "Zoom in to a city to load venues": "Ingrandisci su una città per caricare i locali",
   "Loading venues…": "Caricamento dei locali…",
+  "Claude answers typed chat only. For voice, choose OpenAI or Gemini.": "Claude risponde solo alla chat scritta. Per la voce, scegli OpenAI o Gemini.",
+  "Typed chat answered by Claude": "Chat scritta con risposte di Claude",
   "phone|Police": "Polizia",
   "Reading the location…": "Lettura della posizione…",
   "The short link could not be opened": "Impossibile aprire il link breve",

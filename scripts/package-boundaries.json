@@ -2548,7 +2548,8 @@
       "src/ui/stores/voice.js",
       "src/ui/vueRuntime.js",
       "src/ui/stores/pointerReticle.js",
-      "src/ui/i18n.js"
+      "src/ui/i18n.js",
+      "src/voice/claudeSession.js"
     ],
     "external": ["vue", "pinia", "vue-i18n"]
   },
@@ -3831,7 +3832,8 @@
       "src/data/tileBox.js",
       "src/travel/data/emergency.json",
       "src/travel/controller.js",
-      "src/sources/openFreeMapTravelPois.js"
+      "src/sources/openFreeMapTravelPois.js",
+      "src/voice/claudeSession.js"
     ],
     "external": [
       "hls.js",

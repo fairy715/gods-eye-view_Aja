@@ -63,6 +63,63 @@ export const textProtocols = {
           }
         : item,
   },
+  claude: {
+    endpoint: '/api/claude/chat',
+    keyEnv: 'ANTHROPIC_API_KEY',
+    user: (content) => ({ role: 'user', content }),
+    note: (text) => ({ role: 'assistant', content: [{ type: 'text', text }] }),
+    // A user message of tool results belongs to the turn before it.
+    isUser: (item) =>
+      item.role === 'user' &&
+      (typeof item.content === 'string' ||
+        item.content.some((block) => block.type === 'text')),
+    request: (messages) => ({ messages }),
+    decode(data) {
+      const content = data?.content;
+      if (
+        content?.role !== 'assistant' ||
+        !Array.isArray(content.content) ||
+        !content.content.length ||
+        content.content.length > 64
+      )
+        throw Error('Invalid response');
+      const blocks = content.content;
+      return {
+        // Echoed back whole: thinking blocks are valid only unchanged.
+        content,
+        text: blocks
+          .filter(
+            (block) => block.type === 'text' && typeof block.text === 'string',
+          )
+          .map((block) => block.text)
+          .join(''),
+        calls: blocks
+          .filter((block) => block.type === 'tool_use')
+          .map((block) => ({
+            id: block.id,
+            name: block.name,
+            args: block.input,
+          })),
+        // A declined turn is an answer too: it says so and ends.
+        finished: ['end_turn', 'refusal'].includes(data.finishReason),
+      };
+    },
+    // Every result of one round goes back in a single user message.
+    results: (pairs) => [
+      {
+        role: 'user',
+        content: pairs.map(({ call, result }) => ({
+          type: 'tool_result',
+          tool_use_id: call.id,
+          content: JSON.stringify(result),
+        })),
+      },
+    ],
+    // Earlier turns stay as sent. Rewriting an old result would invalidate
+    // every later thinking block and restart the prompt cache; the context
+    // window has room, and old turns are still dropped whole when it fills.
+    compactResult: (item) => item,
+  },
   openai: {
     endpoint: '/api/openai/chat',
     keyEnv: 'OPENAI_API_KEY',

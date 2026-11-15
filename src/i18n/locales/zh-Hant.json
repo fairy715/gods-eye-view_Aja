@@ -3087,6 +3087,8 @@
   "Hotels": "飯店",
   "Zoom in to a city to load venues": "拉近到城市以載入店家",
   "Loading venues…": "正在載入店家…",
+  "Claude answers typed chat only. For voice, choose OpenAI or Gemini.": "Claude 只提供打字聊天。要用語音請改選 OpenAI 或 Gemini。",
+  "Typed chat answered by Claude": "由 Claude 回答的打字聊天",
   "phone|Police": "報警",
   "Reading the location…": "正在讀取位置…",
   "The short link could not be opened": "無法開啟短網址",
