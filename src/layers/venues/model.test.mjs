@@ -11,7 +11,9 @@ import {
   venueViewBox,
 } from './model.js';
 
-test('only restaurants, cafés and hotels are venues', () => {
+test('restaurants, cafés, hotels, police and fire stations are venues', () => {
+  assert.equal(venueKind({ class: 'police' }), 'police');
+  assert.equal(venueKind({ class: 'fire_station' }), 'fire');
   assert.equal(venueKind({ class: 'restaurant' }), 'restaurant');
   assert.equal(venueKind({ class: 'cafe', subclass: 'cafe' }), 'cafe');
   assert.equal(venueKind({ class: 'lodging', subclass: 'hotel' }), 'hotel');
@@ -79,5 +81,13 @@ test('the nearest venues of the shown kinds are drawn, up to the limit', () => {
   assert.deepEqual(
     nearestVenues(records, centre, kinds, 2).map((record) => record.id),
     ['near', 'mid'],
+  );
+  // A police or fire station is drawn however many nearer venues there are.
+  const station = { id: 'station', kind: 'police', lat: 25.07, lon: 121.53 };
+  assert.deepEqual(
+    nearestVenues([...records, station], centre, { ...kinds, police: true }, 2)
+      .map((record) => record.id)
+      .sort(),
+    ['near', 'station'],
   );
 });

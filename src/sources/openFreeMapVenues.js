@@ -2,10 +2,10 @@ import {
   createOpenFreeMapSource,
   registerOpenFreeMapProjection,
 } from './openFreeMap.js';
-import { mapVenuePoi } from '../layers/venues/model.js';
+import { mapVenuePoi, venueKind } from '../layers/venues/model.js';
 
 /**
- * Restaurants, cafés and hotels from the `poi` layer of an OpenFreeMap
+ * Restaurants, cafés, hotels, police and fire stations from the `poi` layer of an OpenFreeMap
  * (OpenMapTiles schema) tile. The same tiles carry the roads Street Traffic
  * draws, so a view that shows both downloads each tile once.
  * @returns {{venues: object[]}}
@@ -20,12 +20,7 @@ export function decodeOpenFreeMapVenueTile(bytes, z, x, y, tile) {
     const feature = layer.feature(i);
     const props = feature.properties;
     // Skip the geometry of the thousands of other points of interest.
-    if (
-      props.class !== 'restaurant' &&
-      props.class !== 'cafe' &&
-      props.class !== 'lodging'
-    )
-      continue;
+    if (!venueKind(props)) continue;
     // A tile repeats the points in its buffer; they belong to its neighbour.
     const at = feature.loadGeometry()[0]?.[0];
     if (

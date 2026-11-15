@@ -1,5 +1,6 @@
 /**
- * Venues: restaurants, cafés and hotels from OpenStreetMap, read from the
+ * Venues: restaurants, cafés, hotels, police and fire stations from
+ * OpenStreetMap, read from the
  * `poi` layer of OpenFreeMap vector tiles. Pure — record mapping and view
  * arithmetic, no Cesium.
  * @module layers/venues/model
@@ -8,12 +9,23 @@
 export const VENUES_LAYER_ID = 'venues';
 
 /** The kinds drawn, in panel order. */
-export const VENUE_KINDS = Object.freeze(['restaurant', 'cafe', 'hotel']);
+export const VENUE_KINDS = Object.freeze([
+  'restaurant',
+  'cafe',
+  'hotel',
+  'police',
+  'fire',
+]);
+
+/** Kinds few enough, and important enough, to draw however dense the rest. */
+const ALWAYS_DRAWN = new Set(['police', 'fire']);
 
 export const VENUE_COLORS = Object.freeze({
   restaurant: '#ff9f43',
   cafe: '#c8a27a',
   hotel: '#b388ff',
+  police: '#4da3ff',
+  fire: '#ff5a5a',
 });
 
 /** OpenFreeMap serves points of interest at its deepest zoom only. */
@@ -49,6 +61,8 @@ export function venueKind(properties = {}) {
   if (properties.class === 'cafe') return 'cafe';
   if (properties.class === 'lodging' && properties.subclass === 'hotel')
     return 'hotel';
+  if (properties.class === 'police') return 'police';
+  if (properties.class === 'fire_station') return 'fire';
   return null;
 }
 
@@ -106,8 +120,9 @@ export function venueDistanceM(a, b) {
 }
 
 /**
- * The venues to draw: those of the shown kinds nearest the centre, up to a
- * limit, so a district with thousands of restaurants stays drawable.
+ * The venues to draw: police and fire stations always, then those of the
+ * other shown kinds nearest the centre, up to a limit, so a district with
+ * thousands of restaurants stays drawable.
  * @param {Iterable<object>} records
  * @param {{lat: number, lon: number}} centre
  * @param {Record<string, boolean>} kinds
@@ -115,10 +130,17 @@ export function venueDistanceM(a, b) {
  * @returns {object[]} Nearest first.
  */
 export function nearestVenues(records, centre, kinds, limit) {
+  const always = [];
   const ranked = [];
-  for (const record of records)
-    if (kinds[record.kind])
-      ranked.push({ record, distance: venueDistanceM(centre, record) });
-  ranked.sort((a, b) => a.distance - b.distance);
-  return ranked.slice(0, limit).map(({ record }) => record);
+  for (const record of records) {
+    if (!kinds[record.kind]) continue;
+    const entry = { record, distance: venueDistanceM(centre, record) };
+    (ALWAYS_DRAWN.has(record.kind) ? always : ranked).push(entry);
+  }
+  const byDistance = (a, b) => a.distance - b.distance;
+  ranked.sort(byDistance);
+  return [...always, ...ranked.slice(0, Math.max(0, limit - always.length))]
+    .sort(byDistance)
+    .slice(0, limit)
+    .map(({ record }) => record);
 }

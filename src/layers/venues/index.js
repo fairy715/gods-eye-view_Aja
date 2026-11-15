@@ -26,10 +26,12 @@ const KIND_LABELS = Object.freeze({
   restaurant: msg('Restaurants'),
   cafe: msg('Cafés'),
   hotel: msg('Hotels'),
+  police: msg('Police'),
+  fire: msg('Fire Stations'),
 });
 
 /**
- * Restaurants, cafés and hotels around the point the camera looks at, from
+ * Restaurants, cafés, hotels, police and fire stations around the point the camera looks at, from
  * OpenStreetMap as published in OpenFreeMap vector tiles — keyless, and the
  * same tiles Street Traffic reads its roads from. Tiles are decoded once and
  * kept; the venues nearest the view centre are drawn, up to a limit. Nothing
@@ -288,7 +290,7 @@ export function createVenuesLayer({
 
   return {
     id: VENUES_LAYER_ID,
-    name: 'Restaurants, Cafés & Hotels',
+    name: 'Dining, Hotels & Emergency Services',
     icon: '🍽',
     source: 'OpenStreetMap',
     updateInterval: 0,
