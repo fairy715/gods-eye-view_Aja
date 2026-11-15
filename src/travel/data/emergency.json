@@ -1,0 +1,950 @@
+{
+  "checkedOn": "2026-11-15",
+  "sources": {
+    "numbers": "https://en.wikipedia.org/wiki/List_of_emergency_telephone_numbers",
+    "hotline": "https://www.boca.gov.tw/cp-87-2121-7a5da-1.html",
+    "offices": "https://www.boca.gov.tw/sp-foof-countrylp-02-1.html"
+  },
+  "countries": {
+    "JP": {
+      "police": "110",
+      "ambulance": "119",
+      "fire": "119",
+      "other": []
+    },
+    "KR": {
+      "police": "112",
+      "ambulance": "119",
+      "fire": "119",
+      "other": [
+        {
+          "type": "travelHotline",
+          "number": "1330"
+        }
+      ]
+    },
+    "AU": {
+      "police": "000",
+      "ambulance": "000",
+      "fire": "000",
+      "other": [
+        {
+          "type": "nonEmergencyPolice",
+          "number": "131 444"
+        },
+        {
+          "type": "mobile",
+          "number": "112"
+        }
+      ]
+    },
+    "NZ": {
+      "police": "111",
+      "ambulance": "111",
+      "fire": "111",
+      "other": [
+        {
+          "type": "mobile",
+          "number": "112"
+        }
+      ]
+    },
+    "US": {
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "other": []
+    },
+    "CA": {
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "other": []
+    },
+    "GB": {
+      "police": "999 / 112",
+      "ambulance": "999 / 112",
+      "fire": "999 / 112",
+      "other": [
+        {
+          "type": "nonEmergencyPolice",
+          "number": "101"
+        },
+        {
+          "type": "nonEmergencyHealth",
+          "number": "111"
+        }
+      ]
+    },
+    "FR": {
+      "police": "17",
+      "ambulance": "112 / 15",
+      "fire": "112 / 18",
+      "other": []
+    },
+    "DE": {
+      "police": "110",
+      "ambulance": "112",
+      "fire": "112",
+      "other": []
+    },
+    "IT": {
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "other": []
+    },
+    "ES": {
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "other": [
+        {
+          "type": "nationalPolice",
+          "number": "091"
+        }
+      ]
+    },
+    "NL": {
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "other": [
+        {
+          "type": "nonEmergencyPolice",
+          "number": "0900 88 44"
+        }
+      ]
+    },
+    "CH": {
+      "police": "117",
+      "ambulance": "144",
+      "fire": "118",
+      "other": []
+    },
+    "AT": {
+      "police": "112 / 133",
+      "ambulance": "144",
+      "fire": "122",
+      "other": []
+    },
+    "CZ": {
+      "police": "112 / 158",
+      "ambulance": "112 / 155",
+      "fire": "112 / 150",
+      "other": []
+    },
+    "BE": {
+      "police": "101 / 112",
+      "ambulance": "112",
+      "fire": "112",
+      "other": []
+    },
+    "SE": {
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "other": [
+        {
+          "type": "nonEmergencyPolice",
+          "number": "114 14"
+        }
+      ]
+    },
+    "TH": {
+      "police": "191",
+      "ambulance": "1669",
+      "fire": "199",
+      "other": [
+        {
+          "type": "touristPolice",
+          "number": "1155"
+        }
+      ]
+    },
+    "VN": {
+      "police": "113",
+      "ambulance": "115",
+      "fire": "114",
+      "other": []
+    },
+    "SG": {
+      "police": "999",
+      "ambulance": "995",
+      "fire": "995",
+      "other": [
+        {
+          "type": "nonEmergencyPolice",
+          "number": "1800 255 0000"
+        },
+        {
+          "type": "mobile",
+          "number": "112"
+        }
+      ]
+    },
+    "MY": {
+      "police": "999",
+      "ambulance": "999",
+      "fire": "999",
+      "other": [
+        {
+          "type": "mobile",
+          "number": "112"
+        }
+      ]
+    },
+    "PH": {
+      "police": "911",
+      "ambulance": "911",
+      "fire": "911",
+      "other": [
+        {
+          "type": "mobile",
+          "number": "112"
+        }
+      ]
+    },
+    "ID": {
+      "police": "112",
+      "ambulance": "112",
+      "fire": "112",
+      "other": [
+        {
+          "type": "police",
+          "number": "110"
+        },
+        {
+          "type": "ambulance",
+          "number": "118 / 119"
+        },
+        {
+          "type": "fire",
+          "number": "113"
+        }
+      ]
+    },
+    "HK": {
+      "police": "999",
+      "ambulance": "999",
+      "fire": "999",
+      "other": [
+        {
+          "type": "mobile",
+          "number": "112"
+        }
+      ]
+    },
+    "MO": {
+      "police": "999",
+      "ambulance": "999",
+      "fire": "999",
+      "other": []
+    },
+    "CN": {
+      "police": "110",
+      "ambulance": "120",
+      "fire": "119",
+      "other": []
+    },
+    "TR": {
+      "police": "112 / 911 / 153",
+      "ambulance": "112 / 911",
+      "fire": "112 / 911",
+      "other": []
+    },
+    "AE": {
+      "police": "999",
+      "ambulance": "998",
+      "fire": "997",
+      "other": [
+        {
+          "type": "nonEmergencyPolice",
+          "number": "901"
+        }
+      ]
+    }
+  },
+  "hotline": {
+    "number": "800-0885-0885",
+    "dial": {
+      "JP": {
+        "dial": "001-010-800-0885-0885 (KDDI) / 0061-010-800-0885-0885 (SoftBank)",
+        "note": "當地申請之行動電話/市內電話可免費撥打；公用電話無法撥接"
+      },
+      "AU": {
+        "dial": "0011-800-0885-0885",
+        "note": "當地申請之行動電話/市內電話可免費撥打；公用電話有些須插卡或投幣"
+      },
+      "KR": {
+        "dial": "001-800-0885-0885",
+        "note": "當地申請之行動電話 KT、SKT 及 LGU 可免費撥打；公用電話可免費撥打，按「緊急呼叫」按鈕或插入一枚100元硬幣（可退回）；市內電話限KT公司之市話客戶可免費撥打"
+      },
+      "SG": {
+        "dial": "001-800-0885-0885",
+        "note": "市內電話限SingTel公司之市話客戶可免費撥打；公用電話限SingTel卡式公用電話；SingTel、StarHub及M1客戶可免費撥打，但第一次撥號前須洽SingTel註冊"
+      },
+      "TH": {
+        "dial": "001-800-0885-0885",
+        "note": "當地申請之行動電話 AIS、DTAC及True Move 可免費撥打；市內電話可免費撥打；公用電話無法撥打"
+      },
+      "MY": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話/公用電話無法撥打；市內電話限馬來西亞電信公司之市話客戶可免費撥打，但須申請開通可撥打國際電話"
+      },
+      "NZ": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話 Spark、CallPlus、Vodafone / 2degrees 客戶可免費撥打；公用電話無法撥打；市內電話可免費撥打"
+      },
+      "HK": {
+        "dial": "006-0885-0885",
+        "note": "市內電話PCCW公用電話可免費撥打；當地申請之行動電話須付基本通話費"
+      },
+      "MO": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話/公用電話/市內電話可免費撥打"
+      },
+      "PH": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話無法撥打；公用電話/市內電話限PLDT經營之公用電話可免費撥打"
+      },
+      "US": {
+        "dial": "011-800-0885-0885",
+        "note": "當地申請之行動電話/公用電話無法撥打；市內電話限AT&T, Sprint, Verizon 市話客戶可免費撥打"
+      },
+      "CA": {
+        "dial": "011-800-0885-0885",
+        "note": "當地申請之行動電話/公用電話無法撥打；市內電話可免費撥打"
+      },
+      "GB": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話 BT 可免費撥打/VODAFONE 須付基本通話費；公用電話 BT及NW Spectrum 可免費撥打；市內電話限BT/VODAFONE公司之市話客戶可免費撥打"
+      },
+      "FR": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話/市內電話可免費撥打；公用電話可免費撥打，須插卡但免收費"
+      },
+      "DE": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話可免費撥打；公用電話/市內電話限德國電信公司所屬的公用電話/市話客戶可免費撥打"
+      },
+      "CH": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話 Sunrise, Orange及Swisscom 可免費撥打；公用電話無法撥打；市內電話可免費撥打"
+      },
+      "SE": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話無法撥打；公用電話限Telia經營之公用電話；市內電話限Telia公司之市話客戶可免費撥打"
+      },
+      "IT": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話可免費撥打；公用電話限TI經營之公用電話；市內電話限Telecom Italia公司之市話客戶可免費撥打"
+      },
+      "BE": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話可免費撥打；公用電話無法撥打；市內電話 Belgacom之市話可免費撥打，其它業者不保證通"
+      },
+      "NL": {
+        "dial": "00-800-0885-0885",
+        "note": "當地申請之行動電話須付基本通話費；公用電話無法撥打；市內電話限KPN公司之市話客戶可免費撥打"
+      }
+    },
+    "centre": "+886-800-085-095"
+  },
+  "offices": [
+    {
+      "country": "AU",
+      "city": "Brisbane",
+      "nameZh": "駐布里斯本台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office, Brisbane, Australia",
+      "address": "Level 11, 46 Edward Street, Brisbane QLD 4000, Australia (大樓入口由Margaret St進入)",
+      "phone": "+61-7-38281699",
+      "emergencyPhone": "+61-437921436",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-15-c80aa-03-1.html"
+    },
+    {
+      "country": "AU",
+      "city": "Canberra",
+      "nameZh": "駐澳大利亞台北經濟文化代表處",
+      "nameEn": "Taipei Economic and Cultural Office in Australia",
+      "address": "Unit 8, 40 Blackall Street, Barton, ACT 2600, Australia | Unit 5, 40 Blackall Street, Barton, ACT 2600, Australia (領務組)",
+      "phone": "(61-2) 61202000 ; (61-2) 61201030",
+      "emergencyPhone": "行動電話：+61 -412-967-539 | 澳洲境內直撥：0412-967-539",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-17-c471c-03-1.html"
+    },
+    {
+      "country": "AU",
+      "city": "Sydney",
+      "nameZh": "駐雪梨台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Sydney",
+      "address": "Suite 1902, Level 19, 25 Martin Place, Sydney NSW 2000 Australia",
+      "phone": "+61-2-8650-4200",
+      "emergencyPhone": "急難救助專線(境內)：0477586999 | 急難救助專線(境外)：+61-477586999",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-18-2045c-03-1.html"
+    },
+    {
+      "country": "AU",
+      "city": "Melbourne",
+      "nameZh": "駐墨爾本台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Melbourne",
+      "address": "Level 46, 80 Collins St, Melbourne, VIC 3000, Australia",
+      "phone": "+61-3-9650-8611",
+      "emergencyPhone": "+61-413-880-934",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-16-9b625-03-1.html"
+    },
+    {
+      "country": "JP",
+      "city": "Tokyo",
+      "nameZh": "台北駐日經濟文化代表處",
+      "nameEn": "Taipei Economic and Cultural Representative Office in Japan",
+      "address": "東京都港区白金台5-20-2",
+      "phone": "日本境外撥打 (81-3) 32807811 | 日本境内撥打 (03) 32807811",
+      "emergencyPhone": "代表處上班時間專線：(81-3) 3280-7811( 内線4) | 夜間警衛室專線 ：(81-3) 3280-7917 | 手機 ：自國內撥打： (81-80)1009-7179，(81-80)1009-7436； | 日本境內直撥：080-1009-7179，080-1009-7436",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-29-77969-03-1.html"
+    },
+    {
+      "country": "JP",
+      "city": "Yokohama",
+      "nameZh": "台北駐日經濟文化代表處橫濱分處",
+      "nameEn": "Yokohama Branch, Taipei Economic and Cultural Representative Office in Japan",
+      "address": "横浜市中区日本大通り60番地　朝日生命ビル2階",
+      "phone": "境外撥打：+81-45-641-7736~8 | 境內直撥：045-641-7736~8",
+      "emergencyPhone": "日本境內：090-3211-7576 | 漫遊手機：+81-90-3211-7576",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-30-147e1-03-1.html"
+    },
+    {
+      "country": "JP",
+      "city": "Osaka",
+      "nameZh": "台北駐大阪經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Osaka",
+      "address": "Nakanoshima Festival Tower 17 and 19 th FL.,3-18-2-chome Nakanoshima Kita-KU,OSAKA 530-0005 JAPAN",
+      "addressZh": "〒530-0005大阪市北区中之島二丁目三番一八号17樓及19樓",
+      "phone": "境外撥打:(81-6)-6227-8623/境內直撥:06-6227-8623",
+      "emergencyPhone": "日本境內：090-8794-4568 | 漫遊手機：+81-90-8794-4568",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-32-cb309-03-1.html"
+    },
+    {
+      "country": "JP",
+      "city": "Fukuoka",
+      "nameZh": "台北駐大阪經濟文化辦事處福岡分處",
+      "nameEn": "Fukuoka Branch, Taipei Economic and Cultural Office in Osaka",
+      "address": "日本福岡縣福岡市中央區櫻坂3-12-42",
+      "phone": "+81-92-734-2810 / 092-734-2810",
+      "emergencyPhone": "+81-90-1922-9740 / 090-1922-9740",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-31-92761-03-1.html"
+    },
+    {
+      "country": "JP",
+      "city": "Naha",
+      "nameZh": "台北駐日經濟文化代表處那霸分處",
+      "nameEn": "Naha Branch, Taipei Economic and Cultural Representative Office in Japan",
+      "address": "日本沖縄県那覇市久茂地３－１５－９　アルテビル那覇６階",
+      "phone": "台灣手機漫遊撥+81-98-862-7008/日本當地電話撥098-862-7008",
+      "emergencyPhone": "台灣手機漫遊撥+81-80-8056-0122 / 日本當地電話撥080-8056-0122",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-33-90862-03-1.html"
+    },
+    {
+      "country": "JP",
+      "city": "Sapporo",
+      "nameZh": "台北駐日經濟文化代表處札幌分處",
+      "nameEn": "Sapporo Branch,Taipei Economic and Cultural Representative Office in Japan",
+      "address": "北海道札幌市中央區北4條西4丁目1番地 伊藤大樓5樓",
+      "phone": "+81-11-222-2930",
+      "emergencyPhone": "+81-80-1460-2568 | 日本境內直撥：080-1460-2568",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-34-060b2-03-1.html"
+    },
+    {
+      "country": "KR",
+      "city": "Seoul",
+      "nameZh": "駐韓國台北代表部",
+      "nameEn": "Taipei Mission in Korea",
+      "address": "서울시 종로구 세종대로149 광화문빌딩 6층 （ 03186）주한국타이페이대표부",
+      "addressZh": "韓國首爾市鍾路區世宗大路149號光化門大廈6樓(郵遞區號：03186)",
+      "phone": "82-2- 6329-6000",
+      "emergencyPhone": "82-10-9080-2761",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-1-6256a-03-1.html"
+    },
+    {
+      "country": "KR",
+      "city": "Busan",
+      "nameZh": "駐韓國台北代表部釜山辦事處",
+      "nameEn": "Taipei Mission in Korea, Busan Office",
+      "address": "9F, Dongwon industrial Building, 70, Jungang-daero, Jung-gu, Busan, Republic of Korea",
+      "addressZh": "韓國釜山廣域市中區中央大路70號東遠產業大樓9F",
+      "phone": "051-463-7965",
+      "emergencyPhone": "010-4537-7961 (只限中文)",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-2-aff61-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Washington, D.C.",
+      "nameZh": "駐美國台北經濟文化代表處",
+      "nameEn": "Taipei Economic and Cultural Representative Office in the United States (TECRO)",
+      "address": "4201 Wisconsin Avenue, N. W., Washington, District of Columbia 20016-2137, U.S.A.",
+      "phone": "(1-202）895-1800",
+      "emergencyPhone": "（1-202） 669-0180",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-100-57cb3-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Atlanta",
+      "nameZh": "駐亞特蘭大台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Atlanta (TECO in Atlanta)",
+      "address": "1180 West Peachtree Street, NW, Suite 800, Atlanta, Georgia 30309, U.S.A",
+      "phone": "1-404-870-9375/404-870-9375",
+      "emergencyPhone": "1-404-358-3875 / 404-358-3875",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-101-31730-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Boston",
+      "nameZh": "駐波士頓臺北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Boston",
+      "address": "99 Summer Street, Suite 801 Boston, MA 02110 USA",
+      "phone": "+1 (617) 737-2050",
+      "emergencyPhone": "+1 (617) 650-9252",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-102-4dd30-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Chicago",
+      "nameZh": "駐芝加哥臺北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Chicago",
+      "address": "55 West Wacker Drive, Suite 1200, Chicago, IL 60601",
+      "phone": "1-312-616-0100",
+      "emergencyPhone": "1-312-636-4758",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-103-fc929-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Denver",
+      "nameZh": "駐丹佛台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Denver",
+      "address": "1600 Broadway, Suite1740, Denver, CO 80202",
+      "phone": "+1-720-587-2949 (境外)； 720-587-2949 (境內)",
+      "emergencyPhone": "+1-816-522-9546 (境外)； 816-522-9546 (境內)",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-106-db31a-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Tamuning (Guam)",
+      "nameZh": "駐關島台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Guam",
+      "address": "590 South Marine Corps Drive, Suite 721 （位於ITC國際貿易中心7樓）, Tamuning, Guam 96913 U.S.A.",
+      "phone": "1-671-472-5865",
+      "emergencyPhone": "境外撥打: (1-671) 685-8668/ 關島境內直撥：685-8668",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-286-82de6-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Honolulu",
+      "nameZh": "駐檀香山台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Honolulu",
+      "address": "2746 Pali Highway Honolulu, Hawaii 96817, U.S.A.",
+      "phone": "從國內撥打 +1-808-595-6347, +1-808-595-6348, +1-808-595-2668; | 當地撥打 808-5956347, 808-595-6348, 808-595-2668",
+      "emergencyPhone": "從國內撥打+1-808-351-8818; | 在美國大陸撥打1-808-351-8818 | 當地撥打 808-351-8818",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-105-54d65-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Houston",
+      "nameZh": "駐休士頓台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Houston",
+      "address": "11 Greenway Plaza, Suite 2006, Houston, TX 77046",
+      "phone": "1-713-6267445",
+      "emergencyPhone": "1-832-6546041",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-104-64869-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Los Angeles",
+      "nameZh": "駐洛杉磯台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Los Angeles",
+      "address": "4401 Wilshire Boulevard, Los Angeles, CA 90010, U.S.A.",
+      "phone": "(1-213) 389-1215",
+      "emergencyPhone": "(1-213) 923-3591",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-107-79acc-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Miami",
+      "nameZh": "駐邁阿密台北經濟文化辦事處",
+      "nameEn": "Taipei Economic & Cultural Office (TECO) in Miami",
+      "address": "2333 Ponce de Leon Blvd. Suite 610, Coral Gables, FL 33134",
+      "phone": "+1-305-443-8917",
+      "emergencyPhone": "+1-786-253-7333",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-111-59b86-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "New York",
+      "nameZh": "駐紐約台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in New York",
+      "address": "1 E 42nd Street, New York, NY 10017, U.S.A.",
+      "phone": "辦公室總機：+1-212-317-7300",
+      "emergencyPhone": "(1-917) 743-4546",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-108-09ef5-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "San Francisco",
+      "nameZh": "駐舊金山臺北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in San Francisco (TECO in SF)",
+      "address": "345 4th Street, San Francisco, CA 94107",
+      "phone": "代表號（415) 362-7680 | 領務專線 (415)362-7681",
+      "emergencyPhone": "(415) 265-1351",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-109-8dbb9-03-1.html"
+    },
+    {
+      "country": "US",
+      "city": "Seattle",
+      "nameZh": "駐西雅圖台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Seattle",
+      "address": "One Union Square, 600 University St., Suite 2020, Seattle, WA 98101, U.S.A.",
+      "phone": "總機：1-(206) 441-4586",
+      "emergencyPhone": "1-(206) 510-8588",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-110-eece7-03-1.html"
+    },
+    {
+      "country": "CA",
+      "city": "Ottawa",
+      "nameZh": "駐加拿大台北經濟文化代表處",
+      "nameEn": "TAIPEI ECONOMIC AND CULTURAL OFFICE IN CANADA",
+      "address": "45 O'CONNOR STREET, SUITE 1960, OTTAWA, ONTARIO K1P1A4",
+      "phone": "1-613-231-5080",
+      "emergencyPhone": "1-613-762-6090",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-115-e4659-03-1.html"
+    },
+    {
+      "country": "CA",
+      "city": "Toronto",
+      "nameZh": "駐多倫多台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office, Toronto",
+      "address": "151 Yonge Street, Suite 501, Toronto, Ontario,M5C 2W7, Canada",
+      "phone": "+1 416-369-9030",
+      "emergencyPhone": "+1 416-587-8111",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-113-62455-03-1.html"
+    },
+    {
+      "country": "CA",
+      "city": "Vancouver",
+      "nameZh": "駐溫哥華臺北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office, Vancouver",
+      "address": "Suite 2200, 650 West Georgia Street, Vancouver, BC V6B 4N7 Canada",
+      "phone": "1-604-689-4111",
+      "emergencyPhone": "1-604-377-8730",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-114-68ecc-03-1.html"
+    },
+    {
+      "country": "CA",
+      "city": "Montreal",
+      "nameZh": "駐蒙特婁台北經濟文化辦事處",
+      "nameEn": "Bureau Économique et Culturel de Taipei à Montréal",
+      "address": "2310-1800 Avenue McGill College, Montréal, QC H3A 3J6, Canada",
+      "phone": "+1-514-282-8008",
+      "emergencyPhone": "514-971-0485",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-289-aaa50-03-1.html"
+    },
+    {
+      "country": "NZ",
+      "city": "Wellington",
+      "nameZh": "駐紐西蘭台北經濟文化代表處",
+      "nameEn": "Taipei Economic and Cultural Office in New Zealand",
+      "address": "Level 23, 100 Willis Street, Majestic Centre, Wellington, New Zealand",
+      "phone": "+64 4 4736474",
+      "emergencyPhone": "+64 27 449 5300",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-19-2e478-03-1.html"
+    },
+    {
+      "country": "NZ",
+      "city": "Auckland",
+      "nameZh": "駐奧克蘭臺北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Auckland",
+      "address": "Level 15, Tower 2, 205 Queen Street, Auckland",
+      "phone": "+64-9-303-3903",
+      "emergencyPhone": "紐國境內直撥：027-271-2700",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-20-852ac-03-1.html"
+    },
+    {
+      "country": "SG",
+      "city": "Singapore",
+      "nameZh": "駐新加坡台北代表處",
+      "nameEn": "Taipei Representative Office in the Republic of Singapore",
+      "address": "460 Alexandra Road #23-00, mTower, Singapore 119963",
+      "phone": "(+65) 6500-0100/6500-0100",
+      "emergencyPhone": "(+65)9638-9436",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-10-fa952-03-1.html"
+    },
+    {
+      "country": "TH",
+      "city": "Bangkok",
+      "nameZh": "駐泰國台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Thailand",
+      "address": "40/64 Vibhavadi-Rangsit 66, Laksi, 10210 Bangkok, Thailand",
+      "phone": "＋66-2-1193555",
+      "emergencyPhone": "行動電話：(+66) 81-6664006 | 泰國境內直撥：081-6664006",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-24-dec45-03-1.html"
+    },
+    {
+      "country": "VN",
+      "city": "Hanoi",
+      "nameZh": "駐越南台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Vietnam",
+      "address": "20A/21st Floor, PVI Tower, No.1, Pham Van Bach Road, Cau Giay Ward, Hanoi, Vietnam",
+      "phone": "+84-24-38335501",
+      "emergencyPhone": "+84-913219986 (境外撥打)、0913219986(境內直撥)",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-8-f4a19-03-1.html"
+    },
+    {
+      "country": "VN",
+      "city": "Ho Chi Minh City",
+      "nameZh": "駐胡志明市台北經濟文化辦事處",
+      "nameEn": "Taipei Economic & Cultural Office in Ho Chi Minh City",
+      "address": "336 Nguyễn Tri Phương, Phường Vườn Lài, TP.Hồ Chí Minh, Việt Nam",
+      "phone": "境外：（84-28）- 38349160~65 | 境內：（028）- 38349160~65",
+      "emergencyPhone": "境外：+84-903927019 | 境內：0903-927019",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-9-6b662-03-1.html"
+    },
+    {
+      "country": "MY",
+      "city": "Kuala Lumpur",
+      "nameZh": "駐馬來西亞臺北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in Malaysia",
+      "address": "Level 7, Menara Yayasan Tun Razak, 200, Jalan Bukit Bintang 55100 Kuala Lumpur Malaysia",
+      "phone": "(+60)3-21614439/ 03-21614439",
+      "emergencyPhone": "(+60)19656-9912/ 019-656-9912",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-23-a7372-03-1.html"
+    },
+    {
+      "country": "HK",
+      "city": "Hong Kong",
+      "nameZh": "台北經濟文化辦事處/大陸委員會香港辦事處",
+      "nameEn": "Taipei Economic and Cultural Office",
+      "address": "Suite 4907, 49/F Central Plaza, 18 Harbour Road, Wan Chai, Hong Kong",
+      "addressZh": "香港灣仔港灣道18號中環廣場49樓4907室",
+      "phone": "+852-2887-5011",
+      "emergencyPhone": "行動電話：(852) 6143-9012 / 香港境內直撥：6143-9012",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-areacp-35-1c75d-1.html"
+    },
+    {
+      "country": "MO",
+      "city": "Macau",
+      "nameZh": "台北經濟文化辦事處/大陸委員會澳門辦事處",
+      "nameEn": "Taipei Economic and Cultural Office",
+      "address": "澳門新口岸宋玉生廣場411- 417號皇朝廣場5樓J-O座",
+      "phone": "+853-2875-0320",
+      "emergencyPhone": "境外+853-66872557 / 境內66872557",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-areacp-36-45707-1.html"
+    },
+    {
+      "country": "GB",
+      "city": "London",
+      "nameZh": "駐英國台北代表處",
+      "nameEn": "Taipei Representative Office in the U.K.",
+      "address": "46-48 Grosvenor Gardens London SW1W 0EB United Kingdom",
+      "phone": "(44) 20-7881-2650",
+      "emergencyPhone": "(44) 7768-938-765",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-58-7c808-03-1.html"
+    },
+    {
+      "country": "GB",
+      "city": "Edinburgh",
+      "nameZh": "駐英國台北代表處愛丁堡辦事處",
+      "nameEn": "Taipei Representative Office in the U.K., Edinburgh Office",
+      "address": "1 Melville Street, Edinburgh EH3 7PE, United Kingdom",
+      "phone": "英國境外請撥+44 131 220 6890或+44 131 220 6886；英國境內請撥0131 220 6890或0131 220 6886",
+      "emergencyPhone": "英國境外請撥+44 7900 990 385；英國境內請撥07900 990 385",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-59-78aaf-03-1.html"
+    },
+    {
+      "country": "FR",
+      "city": "Paris",
+      "nameZh": "駐法國台北代表處",
+      "nameEn": "Bureau de Représentation de Taipei en France",
+      "address": "78 rue de l'Université 75007 Paris France",
+      "phone": "(33-1) 44398830",
+      "emergencyPhone": "行動電話：(33) 680074994 | 法國境內直撥：0680074994",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-63-4a56f-03-1.html"
+    },
+    {
+      "country": "FR",
+      "city": "Aix-en-Provence",
+      "nameZh": "駐普羅旺斯辦事處",
+      "nameEn": "Bureau de Représentation de Taipei en France Bureau d’Aix-en-Provence",
+      "address": "2e étage, 120 Avenue Napoléon Bonaparte, 13100 Aix-en-Provence",
+      "phone": "+33 4 13 91 19 20/21",
+      "emergencyPhone": "+33 7 61 14 15 20",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-287-cfc43-03-1.html"
+    },
+    {
+      "country": "DE",
+      "city": "Berlin",
+      "nameZh": "駐德國臺北代表處",
+      "nameEn": "Taipeh Vertretung in der Bundesrepublik Deutschland",
+      "address": "Markgrafenstrasse 35, 10117 Berlin, Germany",
+      "phone": "+49-30-203610",
+      "emergencyPhone": "行動電話：+49-171 3898257 德國境內直撥：0171-3898257",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-73-c9bc1-03-1.html"
+    },
+    {
+      "country": "DE",
+      "city": "Frankfurt am Main",
+      "nameZh": "中華民國駐德國台北代表處法蘭克福辦事處",
+      "nameEn": "Taipeh Vertretung in der Bundesrepublik Deutschland, Büro Frankfurt am Main",
+      "address": "Bleichstraße 52, 60313 Frankfurt am Main",
+      "phone": "領務組:+49-69-745 734 | 經濟組:+49-69-745 720 | 觀光組:+49-69-610 743",
+      "emergencyPhone": "境外撥打+49 151 1105 6641/境內直撥 0151 1105 6641",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-281-4373b-03-1.html"
+    },
+    {
+      "country": "DE",
+      "city": "Hamburg",
+      "nameZh": "駐德國台北代表處漢堡辦事處",
+      "nameEn": "Taipeh Vertretung in der Bundesrepublik Deutschland, Büro Hamburg",
+      "address": "Mittelweg 144 / 2.OG, 20148 Hamburg, Germany",
+      "phone": "+49-40 447788, / 040 447788",
+      "emergencyPhone": "+49-171 5217081 / 0171 5217081",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-74-50ba0-03-1.html"
+    },
+    {
+      "country": "DE",
+      "city": "Munich",
+      "nameZh": "駐德國臺北代表處慕尼黑辦事處",
+      "nameEn": "Taipeh Vertretung in der Bundesrepublik Deutschland, Büro München",
+      "address": "Leopoldstraße 28a/V, 80802 München, Germany",
+      "phone": "+49-89-5126790/089-5126790",
+      "emergencyPhone": "+49-(0)-1746326739 /01746326739",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-76-f402e-03-1.html"
+    },
+    {
+      "country": "IT",
+      "city": "Rome",
+      "nameZh": "駐義大利台北代表處",
+      "nameEn": "Ufficio di Rappresentanza di Taipei in Italia",
+      "address": "Viale Liegi No. 17, 00198 Roma, Italia",
+      "phone": "+39-06-9826 2800",
+      "emergencyPhone": "+39-366-806-6434",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-53-ca74a-03-1.html"
+    },
+    {
+      "country": "IT",
+      "city": "Milan",
+      "nameZh": "駐米蘭台北辦事處",
+      "nameEn": "Ufficio di Rappresentanza di Taipei in Italia-Ufficio di Milano",
+      "address": "Via Fabio Filzi 25/A/P.12 20124 Milano, Italia",
+      "phone": "+39 02 4549 6612",
+      "emergencyPhone": "行動電話：+39 3342 222 171 | 義大利境內直撥：3342 222 171",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-288-17a02-03-1.html"
+    },
+    {
+      "country": "ES",
+      "city": "Madrid",
+      "nameZh": "駐西班牙台北經濟文化辦事處",
+      "nameEn": "Oficina Económica y Cultural de Taipei, España",
+      "address": "C / Rosario Pino 14-16， Piso 18 Dcha．Torre Rioja， 28020 Madrid， España (Spain)",
+      "phone": "境外：(+34) 915714678、(+34)915718426、(+34)915714729 | 境內直撥： 915714678、915718426、915714729",
+      "emergencyPhone": "(+34) 639384883",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-69-547ce-03-1.html"
+    },
+    {
+      "country": "NL",
+      "city": "The Hague",
+      "nameZh": "駐荷蘭臺北代表處",
+      "nameEn": "Taipei Representative Office in the Netherlands",
+      "address": "Van Stolkweg 23, 2585 JM Den Haag (The Hague), The Netherlands",
+      "phone": "+31 (0)70 2503000",
+      "emergencyPhone": "行動電話：+31 (0)6 5494-8849 ；荷蘭境內直撥：0654-948849",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-57-0527d-03-1.html"
+    },
+    {
+      "country": "CH",
+      "city": "Bern",
+      "nameZh": "駐瑞士台北文化經濟代表團",
+      "nameEn": "Délégation culturelle et économique de Taipei",
+      "address": "Kirchenfeldstrasse 14, 3005 Bern, Switzerland",
+      "phone": "境外撥打: +41 31 382 2927 或 +41 31 350 8050/ 瑞士境內直撥: 031 382 2927 或 031 350 8050",
+      "emergencyPhone": "行動電話：+41 76 336 6979 / 瑞士境內直撥：076 336 6979",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-71-9a9e2-03-1.html"
+    },
+    {
+      "country": "CH",
+      "city": "Geneva",
+      "nameZh": "駐瑞士台北經濟文化代表團日內瓦辦事處",
+      "nameEn": "Délégation culturelle et économique de Taipei Bureau de Genève",
+      "address": "56, Rue de Moillebeau, 1209 Genève, Suisse",
+      "phone": "+41-22-919-7070",
+      "emergencyPhone": "+41-79-775-5751",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-72-d01b5-03-1.html"
+    },
+    {
+      "country": "AT",
+      "city": "Vienna",
+      "nameZh": "駐奧地利臺北經濟文化代表處",
+      "nameEn": "Taipei Economic and Cultural Office in Austria",
+      "address": "Wagramer Str. 19/11. OG, A-1220 Vienna, Austria",
+      "phone": "奧地利境內請撥 01-2124720 | 奧地利境外請撥+43-1-2124720",
+      "emergencyPhone": "奧地利境內請撥 0664-345-0455 | 奧地利境外請撥+43-664-345-0455",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-54-b0087-03-1.html"
+    },
+    {
+      "country": "CZ",
+      "city": "Prague",
+      "nameZh": "駐捷克台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office, Prague",
+      "address": "Evropska 2590/33c, 160 00 Praha 6, Czech Republic",
+      "phone": "境外撥打：+(420) 233-320-606 | 境內直撥：233-320-606",
+      "emergencyPhone": "重大急難事件境外請撥：+(420) 603-166-707 | 重大急難事件境內直撥：603-166-707",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-55-97d44-03-1.html"
+    },
+    {
+      "country": "PH",
+      "city": "Makati City (Metro Manila)",
+      "nameZh": "駐菲律賓台北經濟文化辦事處",
+      "nameEn": "Taipei Economic and Cultural Office in the Philippines",
+      "address": "本處(Main Office): 41F, Tower 1, RCBC Plaza, 6819 Ayala Avenue, Makati City 1200, Metro Manila, Philippines | 領務(Consular Services):20F, Tower 1, RCBC Plaza, 6819 Ayala Avenue, Makati City 1200, Metro Manila, Philippines",
+      "phone": "本處:(+63) 2-8887-6688 / 02-8887-6688 | 領務組:(+63) 2-8538-8888 / 02-8538-8888",
+      "emergencyPhone": "(+63) 917-8194597 / 0917-8194597",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-11-6fcbf-03-1.html"
+    },
+    {
+      "country": "ID",
+      "city": "Jakarta",
+      "nameZh": "駐印尼台北經濟貿易代表處",
+      "nameEn": "Taipei Economic and Trade Office, Jakarta, Indonesia",
+      "address": "8th and 17th Floor, Gedung Artha Graha, Jl. Jend. Sudirman Kav. 52-53, Jakarta, 12190, Indonesia (領事事務請至8樓)",
+      "phone": "(62)21-515-3939/021-515-3939/ | (62)21-515-1111/021-515-1111(領事事務)",
+      "emergencyPhone": "(62) 811-984-676/0811-984-676",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-12-c23b0-03-1.html"
+    },
+    {
+      "country": "ID",
+      "city": "Surabaya",
+      "nameZh": "駐泗水台北經濟貿易辦事處",
+      "nameEn": "Taipei Economic and Trade Office In Surabaya",
+      "address": "Jalan Indragiri No.49, Surabaya 60241, Indonesia",
+      "phone": "(031)9901-4600",
+      "emergencyPhone": "+62-31-99014600（上班時間） | +62-822-5766-9680（下班後及假日專用）",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-13-5da7f-03-1.html"
+    },
+    {
+      "country": "TR",
+      "city": "Ankara",
+      "nameZh": "駐安卡拉台北經濟文化代表團∕駐土耳其代表處",
+      "nameEn": "Taipei Economic and Cultural Mission in Ankara",
+      "address": "Resit Galip Cad. Rabat Sok. No. 16 G.O.P. 06700 Ankara Türkiye",
+      "phone": "境外直撥電話：(+90-312) 4367255 / (+90-312) 4367256 土國境內直撥：(0312) 4367255 / (0312) 4367256",
+      "emergencyPhone": "行動電話：(+90) 532- 322-7162 | 土國境內直撥：0532-322-7162",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-49-60be6-03-1.html"
+    },
+    {
+      "country": "AE",
+      "city": "Dubai",
+      "nameZh": "駐杜拜臺北商務辦事處",
+      "nameEn": "The Commercial Office of Taipei in Dubai, U.A.E.",
+      "address": "Office M-01, M. Fl, Sharaf Travel Building, 153 Khalid Bin Al Waleed St., Umm Hurair 1, Bur Dubai, Dubai, U.A.E.",
+      "phone": "971-4-3977888/ 04-3977888",
+      "emergencyPhone": "971-50-6453018/ 050-6453018",
+      "sourceUrl": "https://www.boca.gov.tw/sp-foof-countrycp-02-51-e5142-03-1.html"
+    }
+  ]
+}

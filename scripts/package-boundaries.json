@@ -175,7 +175,10 @@
       "src/ui/kit/UiIcon.vue",
       "src/ui/stores/worldTime.js",
       "src/ui/views/panels/WorldTimeline.vue",
-      "src/ui/surfaceKeyboard.js"
+      "src/ui/surfaceKeyboard.js",
+      "src/travel/model.js",
+      "src/ui/stores/travel.js",
+      "src/ui/views/panels/TravelAssist.vue"
     ],
     "external": ["vue", "pinia", "vue-i18n"]
   },
@@ -3822,7 +3825,13 @@
       "src/data/planespottersPhoto.js",
       "src/ui/stores/dataLibrary.js",
       "src/data/openVesselPhoto.js",
-      "src/layers/vessels/photos.js"
+      "src/layers/vessels/photos.js",
+      "src/travel/model.js",
+      "src/ui/stores/travel.js",
+      "src/data/tileBox.js",
+      "src/travel/data/emergency.json",
+      "src/travel/controller.js",
+      "src/sources/openFreeMapTravelPois.js"
     ],
     "external": [
       "hls.js",
@@ -4544,7 +4553,8 @@
       "src/data/imagingSensors.js",
       "src/data/planespottersPhoto.js",
       "src/layers/vessels/photos.js",
-      "src/data/openVesselPhoto.js"
+      "src/data/openVesselPhoto.js",
+      "src/data/tileBox.js"
     ],
     "external": [
       "hls.js",

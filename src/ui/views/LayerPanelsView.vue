@@ -13,6 +13,7 @@ import CctvPanel from './panels/CctvPanel.vue';
 import StreetLevelPanel from './panels/StreetLevelPanel.vue';
 import DrawControls from './panels/DrawControls.vue';
 import GeoImport from './panels/GeoImport.vue';
+import TravelAssist from './panels/TravelAssist.vue';
 import UiSelect from '../kit/UiSelect.js';
 import DataLibraryBrowse from './panels/DataLibraryBrowse.vue';
 
@@ -48,10 +49,10 @@ async function importChosen(event) {
     <DataLibraryBrowse />
   </RailPanel>
 
-  <!-- Utilities: Directions (LayerPanel renders its row here), Draw, Import -->
+  <!-- Utilities: Directions (LayerPanel renders its row here), Travel assist, Draw, Import -->
   <RailPanel id="utilities-panel" start-collapsed :title="t('UTILITIES')" :hint="t('Directions, drawing and your own files')" scroll>
     <div id="utilities-toggles" class="data-toggle-list utilities-list"></div>
-    <div class="utilities-tools"><DrawControls /><GeoImport /></div>
+    <div class="utilities-tools"><TravelAssist /><DrawControls /><GeoImport /></div>
   </RailPanel>
 
   <!-- CCTV Coverage Panel -->

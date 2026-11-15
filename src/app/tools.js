@@ -7,6 +7,11 @@ import {
   releasePointer,
 } from '../data/inputOwnership.js';
 import { initGeoFileImport } from '../ui/geoFileImport.js';
+import { initTravelAssist } from '../travel/controller.js';
+import { createOpenFreeMapTravelSource } from '../sources/openFreeMapTravelPois.js';
+import { placeBelow } from '../data/placeBelow.js';
+import { useTravelStore } from '../ui/stores/travel.js';
+import { overlayHost } from './layers/overlayHost.js';
 import { useDisplayStore } from '../ui/stores/display.js';
 import { applicationPinia } from '../ui/vueRuntime.js';
 import { initImageryBoxTool } from '../ui/imageryBoxTool.js';
@@ -114,6 +119,25 @@ export function createApplicationTools({
     connect: connectDisplay,
   });
   defer(() => geoFileImport?.destroy());
+  // UTILITIES ▸ Travel assist: a traveller's pasted position, that country's
+  // emergency contacts, the nearest help and a walking route to it. Its
+  // markers and saved places live for the application lifetime.
+  const travelStore = useTravelStore(applicationPinia());
+  const travelAssist = initTravelAssist({
+    viewer,
+    dataManager,
+    navigation: styleManager,
+    source: createOpenFreeMapTravelSource(),
+    lookupPlace: placeBelow,
+    overlayHost,
+    requestRender: governorRequestRender,
+    publish: (view) => travelStore.publish(view),
+    connect: (actions) => {
+      const token = travelStore.connect(actions);
+      return () => travelStore.detach(token);
+    },
+  });
+  defer(() => travelAssist.destroy());
   // DATA ▸ Library: entries register their layers only when a viewer adds
   // them, after the core catalog is sealed. The browser dialog and the
   // controller share the application lifetime.
