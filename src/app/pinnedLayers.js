@@ -4,7 +4,9 @@
  * @module app/pinnedLayers
  */
 
-export const PINNED_LAYER_IDS = Object.freeze(['venues', 'traffic']);
+// Street Traffic is left to the user: its moving dots redraw the globe every
+// frame, which costs far more than a static layer on a map left open all day.
+export const PINNED_LAYER_IDS = Object.freeze(['venues']);
 const STORAGE_KEY = 'gev.pinnedLayersOff';
 
 function readOff(storage) {
