@@ -404,6 +404,8 @@ export function createVenuesLayer({
       let statusMessage = null;
       if (tooHigh) statusMessage = msg('Zoom in to a city to load venues');
       else if (loading) statusMessage = msg('Loading venues…');
+      else if (count > DRAW_LIMIT)
+        statusMessage = msg('Showing the nearest places only');
       return {
         count: tooHigh ? 0 : count,
         lastUpdate,

@@ -4,6 +4,7 @@
 // Run with: npm test
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { tilesForBounds } from '../../data/tomtomTiles.js';
 import {
   mapVenuePoi,
   nearestVenues,
@@ -67,6 +68,18 @@ test('the loaded box widens with height and stays bounded', () => {
   assert.ok(Math.abs(spanM(low) - 1400) < 1, 'at least 700 m each way');
   assert.ok(Math.abs(spanM(high) - 5000) < 1, 'at most 2.5 km each way');
   assert.ok(low.west < 121.53 && 121.53 < low.east);
+});
+
+test('the loaded box never needs more tiles than one request may fetch', () => {
+  // Hobart, London, Reykjavík, and the latitude clamp itself.
+  for (const lat of [0, 25, -37.8, -42.9, 51.5, 64.1, 84])
+    for (const lon of [0.01, 121.5319, 147.3272, -0.1276])
+      for (const height of [200, 2500, 15_000]) {
+        const count = tilesForBounds(venueViewBox(lat, lon, height), 14, {
+          maxTiles: 99,
+        }).length;
+        assert.ok(count <= 16, `${lat},${lon} at ${height} m: ${count} tiles`);
+      }
 });
 
 test('the nearest venues of the shown kinds are drawn, up to the limit', () => {

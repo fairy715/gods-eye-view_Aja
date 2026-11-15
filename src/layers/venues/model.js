@@ -90,19 +90,29 @@ export function mapVenuePoi(poi) {
   };
 }
 
+/** Width of a zoom-14 Web Mercator tile at the equator, in metres. */
+const TILE_WIDTH_EQUATOR_M = 40_075_016.686 / 2 ** VENUE_TILE_ZOOM;
+
 /**
- * The box loaded around the view centre: wider from higher up, capped so a
- * dense city stays a few tiles.
+ * The box loaded around the view centre: wider from higher up, capped at
+ * 2.5 km each way and at 1.45 tile widths, so it never spans more than four
+ * tiles a side (the tile source refuses more than sixteen a request). Tiles
+ * narrow with latitude: without the second cap a view over London or Hobart
+ * would ask for too many and load nothing.
  * @param {number} lat
  * @param {number} lon
  * @param {number} cameraHeightM
  * @returns {{south: number, north: number, west: number, east: number}}
  */
 export function venueViewBox(lat, lon, cameraHeightM) {
-  const radiusM = Math.min(2500, Math.max(700, cameraHeightM * 1.2));
+  const cosLat = Math.max(0.05, Math.cos((lat * Math.PI) / 180));
+  const radiusM = Math.min(
+    2500,
+    Math.max(700, cameraHeightM * 1.2),
+    1.45 * TILE_WIDTH_EQUATOR_M * cosLat,
+  );
   const dLat = radiusM / 111_320;
-  const dLon =
-    radiusM / (111_320 * Math.max(0.05, Math.cos((lat * Math.PI) / 180)));
+  const dLon = radiusM / (111_320 * cosLat);
   return {
     south: Math.max(-85, lat - dLat),
     north: Math.min(85, lat + dLat),
