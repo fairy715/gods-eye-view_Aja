@@ -1,0 +1,50 @@
+God's Eye View（Mac 版）安裝說明
+================================
+
+一、安裝
+1. 把「God's Eye View」拖到右邊的「Applications」資料夾。
+2. 這個 App 沒有經過 Apple 公證，第一次打開會被 macOS 擋下。
+   請打開「終端機」，貼上下面這一行後按 Enter（只需做一次）：
+
+   xattr -dr com.apple.quarantine "/Applications/God's Eye View.app"
+
+   或者：先雙擊一次 App，看到警告後按「完成」，再到
+   「系統設定 → 隱私權與安全性」，往下找到 God's Eye View，按「強制打開」。
+
+二、使用
+- 雙擊 App：會在 Dock 出現圖示，並用預設瀏覽器打開地圖
+  （網址 http://127.0.0.1:4173/）。第一次啟動約需半分鐘到一分鐘。
+- 不小心關掉瀏覽器分頁：點一下 Dock 上的 App 圖示就會重新打開地圖。
+- 結束：在 Dock 的 App 圖示按右鍵 →「結束」，伺服器會一起關閉。
+- 建議用 Chrome 當瀏覽器。
+
+三、金鑰與資料
+- 金鑰在地圖右下角「增強」面板填寫，存在本機：
+  ~/Library/Application Support/God's Eye View/app/.env
+- 安裝新版 App 時，金鑰和快取會保留。
+- 每台 Mac 要各自填一次金鑰。
+- 出問題時的紀錄檔：
+  ~/Library/Application Support/God's Eye View/server.log
+
+四、Claude Desktop（選用）
+在 Claude Desktop 的 Settings → Developer → Edit Config 加入下面這段，
+存檔後完全結束 Claude Desktop 再重開（使用前 God's Eye View App 要開著）：
+
+{
+  "mcpServers": {
+    "gods-eye-view": {
+      "command": "/Applications/God's Eye View.app/Contents/Resources/node/bin/node",
+      "args": [
+        "/Users/你的使用者名稱/Library/Application Support/God's Eye View/app/server/mcp/stdio.js",
+        "--api-base",
+        "http://127.0.0.1:4173"
+      ]
+    }
+  }
+}
+
+把「你的使用者名稱」換成你 Mac 的帳號名稱（在終端機輸入 whoami 可查）。
+
+五、限制
+- 只支援 Apple 晶片（M1 以後）的 Mac。
+- 這台 Mac 的 4173 連接埠不能被其他程式佔用。
