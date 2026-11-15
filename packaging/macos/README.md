@@ -21,5 +21,6 @@ it is meant for a few Macs you control, not for distribution.
   page and a few routes, loads the map in Chrome, quits the app and checks
   the server stopped.
 
-`.github/workflows/macos-dmg.yml` runs both on an Apple silicon runner and
-keeps the DMG as a run artifact. `INSTALL.zh-Hant.txt` goes into the DMG.
+`.github/workflows/macos-dmg.yml` runs both on an Apple silicon and an Intel
+runner and keeps one DMG for each as run artifacts. The bundled Node 24 needs
+macOS 13.5 or later on either CPU. `INSTALL.zh-Hant.txt` goes into the DMG.

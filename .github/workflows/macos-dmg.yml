@@ -1,7 +1,8 @@
 name: macOS DMG
 
-# Builds "God's Eye View.app" for Apple silicon as a DMG, installs it from the
-# image, opens it and checks it, then keeps the DMG as a run artifact.
+# Builds "God's Eye View.app" as a DMG for Apple silicon and for Intel Macs,
+# installs each from its image, opens it and checks it, then keeps the DMGs
+# as run artifacts.
 on:
   workflow_dispatch:
   # Every push to a working branch, so the DMG always has the latest app.
@@ -17,8 +18,18 @@ concurrency:
 
 jobs:
   dmg:
-    name: Apple silicon DMG
-    runs-on: macos-15
+    name: ${{ matrix.name }} DMG
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Apple silicon
+            runner: macos-15
+            arch: arm64
+          - name: Intel
+            runner: macos-15-intel
+            arch: x86_64
     timeout-minutes: 45
     env:
       PUPPETEER_SKIP_DOWNLOAD: '1'
@@ -42,7 +53,9 @@ jobs:
 
       - name: Build the app and DMG
         id: build
-        run: packaging/macos/build-app.sh "$RUNNER_TEMP/out"
+        run: |
+          test "$(uname -m)" = "${{ matrix.arch }}"
+          packaging/macos/build-app.sh "$RUNNER_TEMP/out"
 
       - name: Install, open and check the app
         run: packaging/macos/smoke-test.sh "${{ steps.build.outputs.dmg }}"
@@ -50,7 +63,7 @@ jobs:
       - name: Keep the DMG
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: GodsEyeView-macOS-arm64
+          name: GodsEyeView-macOS-${{ matrix.arch }}
           path: ${{ steps.build.outputs.dmg }}
           compression-level: 0
           retention-days: 30
@@ -59,7 +72,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: smoke-screenshot
+          name: smoke-screenshot-${{ matrix.arch }}
           path: ${{ runner.temp }}/smoke.png
           if-no-files-found: ignore
           retention-days: 7
